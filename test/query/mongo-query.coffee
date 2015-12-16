@@ -1,23 +1,13 @@
 require 'should'
 _ = require 'lodash'
 r = require('app-root-path').require
-Query = r('index').query
+common = require './common'
+q = r('index').query
 
-TYPES = Query.TYPES
+TYPES = q.TYPES
 
-negateSpec = (q) ->
-  negated =
-    query: _.cloneDeep q.query
-    translated: q.negTranslated
-  negated.query.negate = not negated.query.negate
-  return negated
-
-testQuery = (q) ->
-  query = q.query
-  expected = q.translated
-  translated = Query.toMongo query
-  expected.should.be.eql translated
-
+testQuery = (querySpec) ->
+  common.testQuery querySpec, q.toMongo
 
 describe 'Mongo query tests', () ->
 
@@ -35,13 +25,13 @@ describe 'Mongo query tests', () ->
     testQuery basicQuerySpec
 
   it 'should translate a negated query', () ->
-    testQuery negateSpec basicQuerySpec
+    testQuery common.negateSpec basicQuerySpec
 
   it 'should translate a simple query', () ->
     testQuery basicQuerySpec
 
   it 'should translate a negated query', () ->
-    testQuery negateSpec basicQuerySpec
+    testQuery common.negateSpec basicQuerySpec
 
   typelessQuerySpec =
     query:
@@ -70,7 +60,7 @@ describe 'Mongo query tests', () ->
     testQuery multimatchQuerySpec
 
   it 'should translate a negated multi-match query', () ->
-    testQuery negateSpec multimatchQuerySpec
+    testQuery common.negateSpec multimatchQuerySpec
 
   nullQuerySpec =
     query:
@@ -92,7 +82,7 @@ describe 'Mongo query tests', () ->
     testQuery nullQuerySpec
 
   it 'should translate a negated null query', () ->
-    testQuery negateSpec nullQuerySpec
+    testQuery common.negateSpec nullQuerySpec
 
   rangeQuerySpec =
     query:
@@ -126,13 +116,13 @@ describe 'Mongo query tests', () ->
     testQuery rangeQuerySpec
 
   it 'should translate a negated range query', () ->
-    testQuery negateSpec rangeQuerySpec
+    testQuery common.negateSpec rangeQuerySpec
 
   it 'should translate a single bound range query', () ->
     testQuery singleBoundRangeQuerySpec
 
   it 'should translate a negated single bound range query', () ->
-    testQuery negateSpec singleBoundRangeQuerySpec
+    testQuery common.negateSpec singleBoundRangeQuerySpec
 
   regexQuery =
     type: TYPES.Q
@@ -142,7 +132,7 @@ describe 'Mongo query tests', () ->
 
   it 'should translate a regex query', () ->
     query = regexQuery
-    translated = Query.toMongo query
+    translated = q.toMongo query
     translated.should.have.property('name').and.be.instanceof RegExp
     translated.name.test('bill').should.equal true
     translated.name.test('WILL').should.equal true
@@ -151,7 +141,7 @@ describe 'Mongo query tests', () ->
   it 'should translate a negated regex query', () ->
     query = _.clone regexQuery
     query.negate = true
-    translated = Query.toMongo query
+    translated = q.toMongo query
     translated.should.have.property 'name'
     translated.name.should.have.property('$not').and.be.instanceof RegExp
     translated.name.$not.test('bill').should.equal true
@@ -180,7 +170,7 @@ describe 'Mongo query tests', () ->
     testQuery compoundQuerySpec
 
   it 'should translate a negated compound query', () ->
-    testQuery negateSpec compoundQuerySpec
+    testQuery common.negateSpec compoundQuerySpec
 
   nestedCompoundQuerySpec =
     query:
@@ -204,7 +194,7 @@ describe 'Mongo query tests', () ->
     testQuery nestedCompoundQuerySpec
 
   it 'should translate a negated nested compound query', () ->
-    testQuery negateSpec nestedCompoundQuerySpec
+    testQuery common.negateSpec nestedCompoundQuerySpec
 
   rawQuerySpec =
     query:
