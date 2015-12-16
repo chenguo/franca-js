@@ -16,5 +16,8 @@
   },
   "scripts": {
     "prepublish": "grunt"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
   }
 }
