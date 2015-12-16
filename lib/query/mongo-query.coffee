@@ -10,13 +10,13 @@ class MongoQuery extends DBQuery
     mongoQuery = @buildQuery query
     return mongoQuery
 
-  buildMatch: (q) ->
+  buildMatchImpl: (q) ->
     fieldQ = if q.negate then $ne: q.match else q.match
     queryObj = {}
     queryObj[q.field] = fieldQ
     return queryObj
 
-  buildNullMatch: (q) ->
+  buildNullMatchImpl: (q) ->
     field = q.field
     cond = [ {}, {} ]
     if q.negate
@@ -30,7 +30,7 @@ class MongoQuery extends DBQuery
       cond[1][field] = $exists: false
       return $or: cond
 
-  buildRangeMatch: (q) ->
+  buildRangeMatchImpl: (q) ->
     min = q.range.min
     max = q.range.max
     field = q.field
@@ -48,8 +48,6 @@ class MongoQuery extends DBQuery
       query[field] = rq
       queries.push query
     if queries.length > 1
-      # Or negated range queries, for below min or
-      # above max
       if q.negate
         return $or: queries
       else
@@ -57,7 +55,7 @@ class MongoQuery extends DBQuery
     else
       return queries[0]
 
-  buildRegexMatch: (q) ->
+  buildRegexMatchImpl: (q) ->
     queryObj = {}
     try
       regex = new RegExp q.regexp, q.regFlags
@@ -66,7 +64,7 @@ class MongoQuery extends DBQuery
     queryObj[q.field] = if q.negate then $not: regex else regex
     return queryObj
 
-  buildRawQuery: (q) ->
+  buildRawImpl: (q) ->
     rawQuery = q.raw
     if 'string' is typeof rawQuery
       try
@@ -79,24 +77,12 @@ class MongoQuery extends DBQuery
       throw new Error "Query is not a JSON string or Object"
     return raw
 
-  buildCompoundQuery: (q) =>
+  buildCompoundImpl: (q) =>
     if q.type is TYPES.AND then condOp = '$and'
-    else if q.type is TYPES.OR then condOp = '$or'
-    else
-      throw new Error 'Invalid compound query type: ' + q.type
-    if q.queries instanceof Array
-      queries = {}
-      if q.negate
-        # Apply De Morgan's
-        condOp = if condOp is '$or' then '$and' else '$or'
-        q.queries = q.queries.map (query) ->
-          query.negate = not query.negate
-          return query
-      queries[condOp] = q.queries.map (query) => @buildQuery query
-    else
-      throw new Error 'Compound query not specified as an array'
-    return queries
-
+    else condOp = '$or'
+    queryObj = {}
+    queryObj[condOp] = q.queries.map (query) => @buildQuery query
+    return queryObj
 
 mongoQuery = new MongoQuery
 

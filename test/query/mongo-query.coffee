@@ -191,5 +191,5 @@ describe 'Mongo query tests', () ->
     translated:
         nestedCompoundQuerySpec.translated
 
-  it 'should translate a nested compound query', () ->
+  it 'should translate a raw query', () ->
     testQuery rawQuerySpec
