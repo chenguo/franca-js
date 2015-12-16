@@ -67,14 +67,17 @@ class MongoQuery extends DBQuery
     return queryObj
 
   buildRawQuery: (q) ->
-    try
-      rawQuery = queryObject.queries[0].raw
-      if 'string' is typeof rawQuery
+    rawQuery = q.raw
+    if 'string' is typeof rawQuery
+      try
         raw = JSON.parse rawQuery
-      else
-        raw = rawQuery
-    catch e
-      throw new Error 'Failed parsing raw query: ' + e
+      catch e
+        throw new Error 'Failed parsing raw query string: ' + e
+    else if rawQuery instanceof Object
+      raw = rawQuery
+    unless raw?
+      throw new Error "Query is not a JSON string or Object"
+    return raw
 
   buildCompoundQuery: (q) =>
     if q.type is TYPES.AND then condOp = '$and'
