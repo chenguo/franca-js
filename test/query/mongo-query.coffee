@@ -6,10 +6,11 @@ Query = r('index').query
 TYPES = Query.TYPES
 
 negateSpec = (q) ->
-  q.query = _.cloneDeep q.query
-  q.query.negate = not q.query.negate
-  q.translated = q.negTranslated
-  return q
+  negated =
+    query: _.cloneDeep q.query
+    translated: q.negTranslated
+  negated.query.negate = not negated.query.negate
+  return negated
 
 testQuery = (q) ->
   query = q.query
@@ -30,7 +31,13 @@ describe 'Mongo query tests', () ->
     negTranslated:
       name: $ne: 'Bill'
 
-  it 'should translate simple query', () ->
+  it 'should translate a simple query', () ->
+    testQuery basicQuerySpec
+
+  it 'should translate a negated query', () ->
+    testQuery negateSpec basicQuerySpec
+
+  it 'should translate a simple query', () ->
     testQuery basicQuerySpec
 
   it 'should translate a negated query', () ->
@@ -48,6 +55,22 @@ describe 'Mongo query tests', () ->
 
   it 'should assume typeless queries are standard queries', () ->
     testQuery typelessQuerySpec
+
+  multimatchQuerySpec =
+    query:
+      type: TYPES.Q
+      field: 'name'
+      match: ['Bill', 'Will']
+    translated:
+      name: $in: ['Bill', 'Will']
+    negTranslated:
+      name: $nin: ['Bill', 'Will']
+
+  it 'should translate a multi-match query', () ->
+    testQuery multimatchQuerySpec
+
+  it 'should translate a negated multi-match query', () ->
+    testQuery negateSpec multimatchQuerySpec
 
   nullQuerySpec =
     query:

@@ -55,7 +55,14 @@ class DBQuery
 
   # Standard single value equality check
   # query
-  buildMatch: (q) -> @buildMatchImpl q
+  buildMatch: (q) ->
+    if q.match instanceof Array and
+       q.match.length is 1
+      q.match = q.match[0]
+    if q.match instanceof Array
+      @buildMatchInImpl q
+    else
+      @buildMatchImpl q
 
   # Match a null / empty value
   buildNullMatch: (q) -> @buildNullMatchImpl q

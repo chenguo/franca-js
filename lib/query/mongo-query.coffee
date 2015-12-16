@@ -1,3 +1,4 @@
+_ = require 'lodash'
 common = require './common'
 DBQuery = require './db-query'
 
@@ -13,6 +14,10 @@ class MongoQuery extends DBQuery
   buildMatchImpl: (q) ->
     fieldQ = if q.negate then $ne: q.match else q.match
     return _.set {}, q.field, fieldQ
+
+  buildMatchInImpl: (q) ->
+    op = if q.negate then '$nin' else '$in'
+    return _.set {}, [q.field, op], q.match
 
   buildNullMatchImpl: (q) ->
     field = q.field
