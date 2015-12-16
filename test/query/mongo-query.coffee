@@ -7,6 +7,7 @@ q = r('index').query
 
 # Translations
 translations =
+  empty: {}
   basic:
     name: 'Bill'
   typeless:
@@ -60,6 +61,13 @@ testQuery = common.makeTester queries, q.toMongo, translations
 testNegatedQuery = common.makeNegateTester queries, q.toMongo, negatedTrans
 
 describe 'Mongo query tests', () ->
+
+  it 'should translate an empty query', () ->
+    testQuery 'empty'
+
+  it 'should throw error when negating an empty query', () ->
+    negEmpty = negate: true
+    q.toMongo.bind(null, negEmpty).should.throw()
 
   it 'should translate a simple query', () ->
     testQuery 'basic'

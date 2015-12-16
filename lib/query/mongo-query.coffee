@@ -80,6 +80,8 @@ class MongoQuery extends DBQuery
     else condOp = '$or'
     return _.set {}, condOp, q.queries.map (query) => @buildQuery query
 
+  buildEmptyImpl: (q) -> {}
+
 mongoQuery = new MongoQuery
 
 module.exports =

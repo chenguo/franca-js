@@ -7,7 +7,7 @@ negateQuery = (q) ->
   return negated
 
 module.exports =
-  negateSpec: (q) ->
+  negateSpec: negateQuery
 
   makeTester: (queries, translator, translations) ->
     return (key) ->

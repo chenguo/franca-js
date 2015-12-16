@@ -57,6 +57,7 @@ nestedCompound =
 
 
 module.exports =
+  empty: {}
   basic: basic
   typeless: typeless
   multimatch: multimatch

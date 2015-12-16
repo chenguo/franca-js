@@ -24,13 +24,10 @@ class DBQuery
       when TYPES.AND, TYPES.OR
         query = @buildCompound q
       else
-        # Default to QUERY.Q
         query = @buildSingle q
     return query
 
   buildSingle: (q) ->
-    if q.queries
-      q = q.queries[0]
     if q.field?
       if q.match?
         query = @buildMatch q
@@ -40,8 +37,10 @@ class DBQuery
         query = @buildRangeMatch q
       else if q.regexp?
         query = @buildRegexMatch q
-    else
+    else if q.text?
       query = @buildFullTextSearch q
+    else
+      query = @buildEmpty q
     return query or {}
 
   notImplemented: ->
@@ -92,5 +91,9 @@ class DBQuery
         return subq
     @buildCompoundImpl q
 
+  buildEmpty: (q) ->
+    if q.negate
+      throw new Error 'Cannot negate empty query'
+    @buildEmptyImpl q
 
 module.exports = DBQuery
