@@ -2,136 +2,100 @@ require 'should'
 _ = require 'lodash'
 r = require('app-root-path').require
 common = require './common'
+queries = require './queries'
 q = r('index').query
 
-TYPES = q.TYPES
+# Translations
+translations =
+  basic:
+    name: 'Bill'
+  typeless:
+    location: $ne: 'Los Angeles'
+  multimatch:
+    name: $in: ['Bill', 'Will']
+  null:
+    $or: [
+      name: null
+    , name: $exists: false
+    ]
+  range:
+    $and: [
+      age: $gte: 20
+    , age: $lte: 30
+    ]
+  singleBoundRange:
+    age: $gte: 20
+translations.compound =
+  $and: [translations.singleBoundRange, translations.typeless]
+translations.nestedCompound =
+  $or: [translations.basic, translations.compound]
 
-testQuery = (querySpec) ->
-  common.testQuery querySpec, q.toMongo
+# Negated translations
+negatedTrans =
+  basic:
+    name: $ne: 'Bill'
+  typeless:
+    location: 'Los Angeles'
+  multimatch:
+    name: $nin: ['Bill', 'Will']
+  null:
+    $and: [
+      name: $ne: null
+    , name: $exists: true
+    ]
+  range:
+    $or: [
+      age: $lt: 20
+    , age: $gt: 30
+    ]
+  singleBoundRange:
+    age: $lt: 20
+negatedTrans.compound =
+  $or: [negatedTrans.singleBoundRange, negatedTrans.typeless]
+negatedTrans.nestedCompound =
+  $and: [negatedTrans.basic, negatedTrans.compound]
+
+
+testQuery = common.makeTester queries, q.toMongo, translations
+testNegatedQuery = common.makeNegateTester queries, q.toMongo, negatedTrans
 
 describe 'Mongo query tests', () ->
 
-  basicQuerySpec =
-    query:
-      type: TYPES.Q
-      field: 'name'
-      match: 'Bill'
-    translated:
-      name: 'Bill'
-    negTranslated:
-      name: $ne: 'Bill'
-
   it 'should translate a simple query', () ->
-    testQuery basicQuerySpec
+    testQuery 'basic'
 
   it 'should translate a negated query', () ->
-    testQuery common.negateSpec basicQuerySpec
-
-  it 'should translate a simple query', () ->
-    testQuery basicQuerySpec
-
-  it 'should translate a negated query', () ->
-    testQuery common.negateSpec basicQuerySpec
-
-  typelessQuerySpec =
-    query:
-      field: 'location'
-      match: 'Los Angeles'
-      negate: true
-    translated:
-      location: $ne: 'Los Angeles'
-    negTranslated:
-      location: 'Los Angeles'
+    testNegatedQuery 'basic'
 
   it 'should assume typeless queries are standard queries', () ->
-    testQuery typelessQuerySpec
-
-  multimatchQuerySpec =
-    query:
-      type: TYPES.Q
-      field: 'name'
-      match: ['Bill', 'Will']
-    translated:
-      name: $in: ['Bill', 'Will']
-    negTranslated:
-      name: $nin: ['Bill', 'Will']
+    testQuery 'typeless'
 
   it 'should translate a multi-match query', () ->
-    testQuery multimatchQuerySpec
+    testQuery 'multimatch'
 
   it 'should translate a negated multi-match query', () ->
-    testQuery common.negateSpec multimatchQuerySpec
-
-  nullQuerySpec =
-    query:
-      type: TYPES.Q
-      field: 'name'
-      null: true
-    translated:
-      $or: [
-        name: null
-      , name: $exists: false
-      ]
-    negTranslated:
-      $and: [
-        name: $ne: null
-      , name: $exists: true
-      ]
+    testNegatedQuery 'multimatch'
 
   it 'should translate a null query', () ->
-    testQuery nullQuerySpec
+    testQuery 'null'
 
   it 'should translate a negated null query', () ->
-    testQuery common.negateSpec nullQuerySpec
-
-  rangeQuerySpec =
-    query:
-      type: TYPES.Q
-      field: 'age'
-      range:
-        min: 20
-        max: 30
-    translated:
-      $and: [
-        age: $gte: 20
-      , age: $lte: 30
-      ]
-    negTranslated:
-      $or: [
-        age: $lt: 20
-      , age: $gt: 30
-      ]
-
-  singleBoundRangeQuerySpec =
-    query:
-      type: TYPES.Q
-      field: 'age'
-      range: min: 20
-    translated:
-      age: $gte: 20
-    negTranslated:
-      age: $lt: 20
+    testNegatedQuery 'null'
 
   it 'should translate a range query', () ->
-    testQuery rangeQuerySpec
+    testQuery 'range'
 
   it 'should translate a negated range query', () ->
-    testQuery common.negateSpec rangeQuerySpec
+    testNegatedQuery 'range'
 
   it 'should translate a single bound range query', () ->
-    testQuery singleBoundRangeQuerySpec
+    testQuery 'singleBoundRange'
 
   it 'should translate a negated single bound range query', () ->
-    testQuery common.negateSpec singleBoundRangeQuerySpec
-
-  regexQuery =
-    type: TYPES.Q
-    field: 'name'
-    regexp: '[wb]ill'
-    regFlags: 'i'
+    testNegatedQuery 'singleBoundRange'
 
   it 'should translate a regex query', () ->
-    query = regexQuery
+    query = queries.regexp
     translated = q.toMongo query
     translated.should.have.property('name').and.be.instanceof RegExp
     translated.name.test('bill').should.equal true
@@ -139,7 +103,7 @@ describe 'Mongo query tests', () ->
     translated.name.test('fill').should.equal false
 
   it 'should translate a negated regex query', () ->
-    query = _.clone regexQuery
+    query = _.clone queries.regexp
     query.negate = true
     translated = q.toMongo query
     translated.should.have.property 'name'
@@ -148,61 +112,23 @@ describe 'Mongo query tests', () ->
     translated.name.$not.test('WILL').should.equal true
     translated.name.$not.test('fill').should.equal false
 
-  compoundQuerySpec =
-    query:
-      type: TYPES.AND
-      queries: [
-        singleBoundRangeQuerySpec.query
-      , typelessQuerySpec.query
-      ]
-    translated:
-      $and: [
-        singleBoundRangeQuerySpec.translated
-      , typelessQuerySpec.translated
-      ]
-    negTranslated:
-      $or: [
-        singleBoundRangeQuerySpec.negTranslated
-      , typelessQuerySpec.negTranslated
-      ]
-
   it 'should translate a compound query', () ->
-    testQuery compoundQuerySpec
+    testQuery 'compound'
 
   it 'should translate a negated compound query', () ->
-    testQuery common.negateSpec compoundQuerySpec
-
-  nestedCompoundQuerySpec =
-    query:
-      type: TYPES.OR
-      queries: [
-        basicQuerySpec.query
-      , compoundQuerySpec.query
-      ]
-    translated:
-      $or: [
-        basicQuerySpec.translated
-      , compoundQuerySpec.translated
-      ]
-    negTranslated:
-      $and: [
-        basicQuerySpec.negTranslated
-      , compoundQuerySpec.negTranslated
-      ]
+    testNegatedQuery 'compound'
 
   it 'should translate a nested compound query', () ->
-    testQuery nestedCompoundQuerySpec
+    testQuery 'nestedCompound'
 
   it 'should translate a negated nested compound query', () ->
-    testQuery common.negateSpec nestedCompoundQuerySpec
-
-  rawQuerySpec =
-    query:
-      type: TYPES.RAW
-      raw:
-        nestedCompoundQuerySpec.translated
-    translated:
-        nestedCompoundQuerySpec.translated
+    testNegatedQuery 'nestedCompound'
 
   it 'should translate a raw query', () ->
-    testQuery rawQuerySpec
+    rawQuery =
+      type: q.TYPES.RAW
+      raw:
+        translations.nestedCompound
+    translated = q.toMongo rawQuery
+    expected = translations.nestedCompound
+    expected.should.be.eql translated

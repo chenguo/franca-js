@@ -1,16 +1,24 @@
 require 'should'
 _ = require 'lodash'
 
+negateQuery = (q) ->
+  negated = _.cloneDeep q
+  negated.negate = not q.negate
+  return negated
+
 module.exports =
   negateSpec: (q) ->
-    negated =
-      query: _.cloneDeep q.query
-      translated: q.negTranslated
-    negated.query.negate = not negated.query.negate
-    return negated
 
-  testQuery: (q, translator) ->
-    query = q.query
-    expected = q.translated
-    translated = translator query
-    expected.should.be.eql translated
+  makeTester: (queries, translator, translations) ->
+    return (key) ->
+      query = queries[key]
+      expected = translations[key]
+      translated = translator query
+      expected.should.be.eql translated
+
+  makeNegateTester: (queries, translator, negatedTranslations) ->
+    return (key) ->
+      query = negateQuery queries[key]
+      expected = negatedTranslations[key]
+      translated = translator query
+      expected.should.be.eql translated
