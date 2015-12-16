@@ -12,9 +12,7 @@ class MongoQuery extends DBQuery
 
   buildMatchImpl: (q) ->
     fieldQ = if q.negate then $ne: q.match else q.match
-    queryObj = {}
-    queryObj[q.field] = fieldQ
-    return queryObj
+    return _.set {}, q.field, fieldQ
 
   buildNullMatchImpl: (q) ->
     field = q.field
@@ -38,15 +36,11 @@ class MongoQuery extends DBQuery
     if min?
       if q.negate then rq = $lt: min
       else rq = $gte: min
-      query = {}
-      query[field] = rq
-      queries.push query
+      queries.push _.set {}, field, rq
     if max?
       if q.negate then rq = $gt: max
       else rq = $lte: max
-      query = {}
-      query[field] = rq
-      queries.push query
+      queries.push _.set {}, field, rq
     if queries.length > 1
       if q.negate
         return $or: queries
@@ -56,13 +50,12 @@ class MongoQuery extends DBQuery
       return queries[0]
 
   buildRegexMatchImpl: (q) ->
-    queryObj = {}
     try
       regex = new RegExp q.regexp, q.regFlags
     catch e
       throw new Error 'Query regex fail: ' + e
-    queryObj[q.field] = if q.negate then $not: regex else regex
-    return queryObj
+    regq = if q.negate then $not: regex else regex
+    return _.set {}, q.field, regq
 
   buildRawImpl: (q) ->
     rawQuery = q.raw
@@ -80,9 +73,7 @@ class MongoQuery extends DBQuery
   buildCompoundImpl: (q) =>
     if q.type is TYPES.AND then condOp = '$and'
     else condOp = '$or'
-    queryObj = {}
-    queryObj[condOp] = q.queries.map (query) => @buildQuery query
-    return queryObj
+    return _.set {}, condOp, q.queries.map (query) => @buildQuery query
 
 mongoQuery = new MongoQuery
 
