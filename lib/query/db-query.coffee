@@ -74,7 +74,9 @@ class DBQuery
     @buildRangeMatchImpl q
 
   # Query with a regular express
-  buildRegexMatch: (q) -> @buildRegexMatchImpl q
+  buildRegexMatch: (q) ->
+    unless q.regexp instanceof RegExp or typeof q.regexp is 'string'
+    @buildRegexMatchImpl q
 
   # Full text search query
   buildFullTextSearch: @::notImplemented
