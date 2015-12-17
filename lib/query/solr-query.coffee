@@ -91,6 +91,12 @@ class SolrQuery extends DBQuery
     qstr = @negateQuery qstr if q.negate
     return qstr
 
+  buildRawImpl: (q) ->
+    rawQuery = q.raw
+    if 'string' is not typeof rawQuery
+      throw new Error 'Raw Solr query is not a string: ' + rawQuery
+    return rawQuery
+
   buildEmptyImpl: (q) ->
     return '*:*'
 

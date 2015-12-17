@@ -148,3 +148,11 @@ describe 'Solr query tests', () ->
 
   it 'should translate a negated nested compound query', () ->
     testNegatedQuery 'nestedCompound'
+
+  it 'should translate a raw query', () ->
+    rawQuery =
+      type: q.TYPES.RAW
+      raw: translations.nestedCompound
+    translated = q.toSolr rawQuery
+    expected = translations.nestedCompound
+    expected.should.be.eql translated

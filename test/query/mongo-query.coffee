@@ -135,8 +135,7 @@ describe 'Mongo query tests', () ->
   it 'should translate a raw query', () ->
     rawQuery =
       type: q.TYPES.RAW
-      raw:
-        translations.nestedCompound
+      raw: translations.nestedCompound
     translated = q.toMongo rawQuery
     expected = translations.nestedCompound
     expected.should.be.eql translated

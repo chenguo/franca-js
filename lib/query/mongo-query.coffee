@@ -72,7 +72,7 @@ class MongoQuery extends DBQuery
     else if rawQuery instanceof Object
       raw = rawQuery
     unless raw?
-      throw new Error "Query is not a JSON string or Object"
+      throw new Error 'Raw Mongo query is not a JSON string or Object: ' + rawQuery
     return raw
 
   buildCompoundImpl: (q) =>
