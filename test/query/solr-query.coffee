@@ -14,6 +14,11 @@ translations =
   null: "(*:* NOT name:[* TO *])"
   range: "age:[20 TO 30]"
   singleBoundRange: "age:[20 TO *]"
+  regexp: 'name:/.*[wb]ill.*/'
+translations.compound =
+  '(' + translations.singleBoundRange + ' AND ' + translations.typeless + ')'
+translations.nestedCompound =
+  '(' + translations.basic + ' OR ' + translations.compound + ')'
 
 
 negatedTrans =
@@ -23,6 +28,11 @@ negatedTrans =
   null: "name:[* TO *]"
   range: "(*:* NOT age:[20 TO 30])"
   singleBoundRange: "(*:* NOT age:[20 TO *])"
+  regexp: '(*:* NOT name:/.*[wb]ill.*/)'
+negatedTrans.compound =
+  '(' + negatedTrans.singleBoundRange + ' OR ' + negatedTrans.typeless + ')'
+negatedTrans.nestedCompound =
+  '(' + negatedTrans.basic + ' AND ' + negatedTrans.compound + ')'
 
 testQuery = common.makeTester queries, q.toSolr, translations
 testNegatedQuery = common.makeNegateTester queries, q.toSolr, negatedTrans
@@ -70,17 +80,10 @@ describe 'Solr query tests', () ->
     testNegatedQuery 'singleBoundRange'
 
   it 'should translate a regex query', () ->
-    query = queries.regexp
-    translated = q.toSolr query
-    expected = 'name:/.*[wb]ill.*/'
-    expected.should.be.equal translated
+    testQuery 'regexp'
 
   it 'should translate a negated regex query', () ->
-    query = _.clone queries.regexp
-    query.negate = true
-    translated = q.toSolr query
-    expected = '(*:* NOT name:/.*[wb]ill.*/)'
-    expected.should.be.equal translated
+    testNegatedQuery 'regexp'
 
   it 'should translate an anchored regex query ', () ->
     query =
@@ -112,7 +115,7 @@ describe 'Solr query tests', () ->
     expected = 'name:/bill.*/'
     expected.should.be.equal translated
 
-  it "should translate regex queries with some JS style character classes", () ->
+  it 'should translate regex queries with some JS style character classes', () ->
     query =
       field: 'address'
       regexp: '/^\\d{1,3} /'
@@ -133,3 +136,15 @@ describe 'Solr query tests', () ->
     translated = q.toSolr query
     expected = 'address:/[A-Za-z0-9_]{3,5}/'
     expected.should.be.equal translated
+
+  it 'should translate a compound query', () ->
+    testQuery 'compound'
+
+  it 'should translate a negated compound query', () ->
+    testNegatedQuery 'compound'
+
+  it 'should translate a nested compound query', () ->
+    testQuery 'nestedCompound'
+
+  it 'should translate a negated nested compound query', () ->
+    testNegatedQuery 'nestedCompound'

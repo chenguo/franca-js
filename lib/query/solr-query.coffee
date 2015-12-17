@@ -79,9 +79,17 @@ class SolrQuery extends DBQuery
     else
       reg = '/' + reg if reg[0] isnt '/'
       reg = reg + '/' if reg[reg.length - 1] isnt '/'
-    reg = q.field + ':' + @translateRegex reg
-    reg = @negateQuery reg if q.negate
-    return reg
+    qstr = q.field + ':' + @translateRegex reg
+    qstr = @negateQuery qstr if q.negate
+    return qstr
+
+  buildCompoundImpl: (q) ->
+    if q.type is TYPES.AND then condOp = 'AND'
+    else condOp = 'OR'
+    conds = q.queries.map (query) => @buildQuery query
+    qstr = '(' + conds.join(" #{condOp} ") + ')'
+    qstr = @negateQuery qstr if q.negate
+    return qstr
 
   buildEmptyImpl: (q) ->
     return '*:*'

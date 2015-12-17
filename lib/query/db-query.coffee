@@ -92,6 +92,7 @@ class DBQuery
       q.queries = q.queries.map (subq) ->
         subq.negate = not subq.negate
         return subq
+      q.negate = false
     @buildCompoundImpl q
 
   buildEmpty: (q) ->
