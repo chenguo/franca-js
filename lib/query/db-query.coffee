@@ -76,6 +76,7 @@ class DBQuery
   # Query with a regular express
   buildRegexMatch: (q) ->
     unless q.regexp instanceof RegExp or typeof q.regexp is 'string'
+      throw new Error 'Invalid regular expression query: ' + q.regexp
     @buildRegexMatchImpl q
 
   # Full text search query

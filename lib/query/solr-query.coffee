@@ -40,24 +40,48 @@ class SolrQuery extends DBQuery
 
   translateAnchors: (regStr) ->
     # Solr regexes are implicit full string matches.
-    # Add .* to remove this implicitness 
+    # Add .* to remove this implicitness
     # Use .* and lackthereof to simulate anchors that
     # may be present
+    if /^\/\^/.test regStr
+      noStartWildcard = true
+      regStr = regStr.replace /^\/\^/, '/'
+    if /\$\/$/.test regStr
+      noEndWildcard = true
+      regStr = regStr.replace /\$\/$/, '/'
+    unless noStartWildcard or /^\/\.\*/.test regStr
+      regStr = regStr.replace /^\//, "/.*"
+    unless noEndWildcard or /\.\*\$/.test regStr
+      regStr = regStr.replace /\/$/, ".*/"
+    return regStr
 
+  translateCharacterClasses: (regStr) ->
+    # Some popular character classes are not supported
+    # by Solr
+    regStr = regStr.replace /\\d/, '[0-9]'
+    regStr = regStr.replace /\\D/, '[^0-9]'
+    regStr = regStr.replace /\\w/, '[A-Za-z0-9_]'
+    regStr = regStr.replace /\\W/, '[^A-Za-z0-9_]'
+    return regStr
 
   # Solr's regex format is different than the
   # style that Javascript uses. Do some *very*
   # basic translations
   translateRegex: (regStr) =>
     regStr = @translateAnchors regStr
+    regStr = @translateCharacterClasses regStr
+    return regStr
 
   buildRegexMatchImpl: (q) ->
     reg = q.regexp
     if q.regexp instanceof RegExp
       reg = q.regexp.toString()
     else
-      reg = '/' + reg + '/'
-    return @translateRegex reg
+      reg = '/' + reg if reg[0] isnt '/'
+      reg = reg + '/' if reg[reg.length - 1] isnt '/'
+    reg = q.field + ':' + @translateRegex reg
+    reg = @negateQuery reg if q.negate
+    return reg
 
   buildEmptyImpl: (q) ->
     return '*:*'

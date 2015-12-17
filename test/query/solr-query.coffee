@@ -81,3 +81,55 @@ describe 'Solr query tests', () ->
     translated = q.toSolr query
     expected = '(*:* NOT name:/.*[wb]ill.*/)'
     expected.should.be.equal translated
+
+  it 'should translate an anchored regex query ', () ->
+    query =
+      field: 'name'
+      regexp: '/bill/'
+    translated = q.toSolr query
+    expected = 'name:/.*bill.*/'
+    expected.should.be.equal translated
+
+    query =
+      field: 'name'
+      regexp: '/^bill/'
+    translated = q.toSolr query
+    expected = 'name:/bill.*/'
+    expected.should.be.equal translated
+
+    query =
+      field: 'name'
+      regexp: '/bill$/'
+    translated = q.toSolr query
+    expected = 'name:/.*bill/'
+    expected.should.be.equal translated
+
+  it "should translate regex queries without explicit '/' characters", () ->
+    query =
+      field: 'name'
+      regexp: '^bill'
+    translated = q.toSolr query
+    expected = 'name:/bill.*/'
+    expected.should.be.equal translated
+
+  it "should translate regex queries with some JS style character classes", () ->
+    query =
+      field: 'address'
+      regexp: '/^\\d{1,3} /'
+    translated = q.toSolr query
+    expected = 'address:/[0-9]{1,3} .*/'
+    expected.should.be.equal translated
+
+    query =
+      field: 'address'
+      regexp: '/^\\D{1,3} /'
+    translated = q.toSolr query
+    expected = 'address:/[^0-9]{1,3} .*/'
+    expected.should.be.equal translated
+
+    query =
+      field: 'address'
+      regexp: '/^\\w{3,5}$/'
+    translated = q.toSolr query
+    expected = 'address:/[A-Za-z0-9_]{3,5}/'
+    expected.should.be.equal translated
