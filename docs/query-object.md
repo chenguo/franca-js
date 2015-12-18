@@ -9,13 +9,13 @@ Example:
   "type": "Q",
   "field": "test-score",
   "range": {
-    "min": 80,
-    "max": 90
+    "gte": 80,
+    "lte": 90
   }
 }
 ```
 
-For different data backends, this translates into different things. For Mongo, this translates into ```{$and: [{"test-score": {$gte: 80}}, {"test-score": {$lte: 90}}]}``` to be fed to a ```find()``` or ```update``` call. For Solr, this translates into ```test-score:[80 TO 90]``` to be added to a Solr query string.
+For different data backends, this translates into different things. For instance, this translates into the Solr query ```test-score:[80 TO 90]``` which can be included in a Solr query string.
 
 
 ## Query Types
@@ -77,24 +77,34 @@ Range queries are for fields for which the underlying database supports a compar
   "type": "Q",
   "field": "rating",
   "range": {
-    "min": 50,
-    "max": 70
+    "gt": 50,
+    "lte": 70
   }
 }
 ```
 
-The above translates into query for rows where the ```rating``` field falls between 50 and 70, inclusive.
+The above translates into query for rows where the ```rating``` field has a value above 50 and less than or equal to 70.
 
-A single bounding range can also be specified:
+A single-bound range can also be specified:
 ```json
 {
   "type": "Q",
   "field": "rating",
   "range": {
-    "min": 50
+    "gt": 50
   }
 }
 ```
+
+The bounds can be express with the following keys under the ```range``` subkey:
+```gt```: greater than
+```gte```: greater than or equal to
+```lt```: less than
+```lte```: less than or equal to
+
+If both ```gt``` and ```gte``` or both ```lt``` and ```lte``` is specified, there is no guarantee of precedence and behavior is undefined.
+
+
 
 ##### Regex Match
 
@@ -150,8 +160,8 @@ Compound queries exist to support ```AND``` and ```OR``` conditionals for querie
     "type": "Q",
     "field": "year",
     "range": {
-      "min": 2005,
-      "max": 2009
+      "gte": 2005,
+      "lte": 2009
     }
   }]
 }
