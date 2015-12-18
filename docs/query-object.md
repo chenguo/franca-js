@@ -22,9 +22,9 @@ For different data backends, this translates into different things. For instance
 
 The top-level ```type``` key determines how this query is handled.
 
-* ```Q```: indicates this query is one of several types of standard queries. If no type is specified, the query defaults to this type.
-* ```AND```, ```OR```: indicates a compound query, with nested subqueries
-* ```RAW```: indicates a raw query that will be untouched during translation
+* **Q**: indicates this query is one of several types of standard queries. If no type is specified, the query defaults to this type.
+* **AND**, **OR**: indicates a compound query, with nested subqueries
+* **RAW**: indicates a raw query that will be untouched during translation
 
 
 ### Standard Queries
@@ -98,10 +98,10 @@ A single-bound range can also be specified:
 
 The bounds can be express with the following keys under the ```range``` subkey:
 
-* ```gt```: greater than
-* ```gte```: greater than or equal to
-* ```lt```: less than
-* ```lte```: less than or equal to
+* **gt**: greater than
+* **gte**: greater than or equal to
+* **lt**: less than
+* **lte**: less than or equal to
 
 If both ```gt``` and ```gte``` or both ```lt``` and ```lte``` is specified, there is no guarantee of precedence and behavior is undefined.
 
