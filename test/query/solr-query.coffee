@@ -3,7 +3,8 @@ _ = require 'lodash'
 r = require('app-root-path').require
 common = require './common'
 queries = require './queries'
-q = r('index').query
+types = r('lib/query/common').TYPES
+solrQuery = r('lib/query/solr-query')
 
 
 translations =
@@ -36,8 +37,8 @@ negatedTrans.compound =
 negatedTrans.nestedCompound =
   '(' + negatedTrans.basic + ' AND ' + negatedTrans.compound + ')'
 
-testQuery = common.makeTester queries, q.toSolr, translations
-testNegatedQuery = common.makeNegateTester queries, q.toSolr, negatedTrans
+testQuery = common.makeTester queries, solrQuery.toNative, translations
+testNegatedQuery = common.makeNegateTester queries, solrQuery.toNative, negatedTrans
 
 describe 'Solr query tests', () ->
 
@@ -46,7 +47,7 @@ describe 'Solr query tests', () ->
 
   it 'should throw error when negating an empty query', () ->
     negEmpty = negate: true
-    q.toMongo.bind(null, negEmpty).should.throw()
+    solrQuery.toNative.bind(null, negEmpty).should.throw()
 
   it 'should translate a simple query', () ->
     testQuery 'basic'
@@ -97,21 +98,21 @@ describe 'Solr query tests', () ->
     query =
       field: 'name'
       regexp: '/bill/'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'name:/.*bill.*/'
     expected.should.be.equal translated
 
     query =
       field: 'name'
       regexp: '/^bill/'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'name:/bill.*/'
     expected.should.be.equal translated
 
     query =
       field: 'name'
       regexp: '/bill$/'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'name:/.*bill/'
     expected.should.be.equal translated
 
@@ -119,7 +120,7 @@ describe 'Solr query tests', () ->
     query =
       field: 'name'
       regexp: '^bill'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'name:/bill.*/'
     expected.should.be.equal translated
 
@@ -127,21 +128,21 @@ describe 'Solr query tests', () ->
     query =
       field: 'address'
       regexp: '/^\\d{1,3} /'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'address:/[0-9]{1,3} .*/'
     expected.should.be.equal translated
 
     query =
       field: 'address'
       regexp: '/^\\D{1,3} /'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'address:/[^0-9]{1,3} .*/'
     expected.should.be.equal translated
 
     query =
       field: 'address'
       regexp: '/^\\w{3,5}$/'
-    translated = q.toSolr query
+    translated = solrQuery.toNative query
     expected = 'address:/[A-Za-z0-9_]{3,5}/'
     expected.should.be.equal translated
 
@@ -159,8 +160,8 @@ describe 'Solr query tests', () ->
 
   it 'should translate a raw query', () ->
     rawQuery =
-      type: q.TYPES.RAW
+      type: types.RAW
       raw: translations.nestedCompound
-    translated = q.toSolr rawQuery
+    translated = solrQuery.toNative rawQuery
     expected = translations.nestedCompound
     expected.should.be.eql translated

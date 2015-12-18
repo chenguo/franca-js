@@ -3,7 +3,8 @@ _ = require 'lodash'
 r = require('app-root-path').require
 common = require './common'
 queries = require './queries'
-q = r('index').query
+types = r('lib/query/common').TYPES
+mongoQuery = r('lib/query/mongo-query')
 
 # Translations
 translations =
@@ -67,8 +68,8 @@ negatedTrans.nestedCompound =
   $and: [negatedTrans.basic, negatedTrans.compound]
 
 
-testQuery = common.makeTester queries, q.toMongo, translations
-testNegatedQuery = common.makeNegateTester queries, q.toMongo, negatedTrans
+testQuery = common.makeTester queries, mongoQuery.toNative, translations
+testNegatedQuery = common.makeNegateTester queries, mongoQuery.toNative, negatedTrans
 
 describe 'Mongo query tests', () ->
 
@@ -77,7 +78,7 @@ describe 'Mongo query tests', () ->
 
   it 'should throw error when negating an empty query', () ->
     negEmpty = negate: true
-    q.toMongo.bind(null, negEmpty).should.throw()
+    mongoQuery.toNative.bind(null, negEmpty).should.throw()
 
   it 'should translate a simple query', () ->
     testQuery 'basic'
@@ -120,7 +121,7 @@ describe 'Mongo query tests', () ->
 
   it 'should translate a regex query', () ->
     query = queries.regexp
-    translated = q.toMongo query
+    translated = mongoQuery.toNative query
     translated.should.have.property('name').and.be.instanceof RegExp
     translated.name.test('bill').should.equal true
     translated.name.test('WILL').should.equal true
@@ -129,7 +130,7 @@ describe 'Mongo query tests', () ->
   it 'should translate a negated regex query', () ->
     query = _.clone queries.regexp
     query.negate = true
-    translated = q.toMongo query
+    translated = mongoQuery.toNative query
     translated.should.have.property 'name'
     translated.name.should.have.property('$not').and.be.instanceof RegExp
     translated.name.$not.test('bill').should.equal true
@@ -150,8 +151,8 @@ describe 'Mongo query tests', () ->
 
   it 'should translate a raw query', () ->
     rawQuery =
-      type: q.TYPES.RAW
+      type: types.RAW
       raw: translations.nestedCompound
-    translated = q.toMongo rawQuery
+    translated = mongoQuery.toNative rawQuery
     expected = translations.nestedCompound
     expected.should.be.eql translated

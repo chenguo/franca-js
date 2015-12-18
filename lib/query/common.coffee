@@ -4,4 +4,3 @@ module.exports =
     AND: 'AND'
     OR: 'OR'
     RAW: 'RAW'
-
