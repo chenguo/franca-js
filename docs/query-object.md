@@ -97,6 +97,7 @@ A single-bound range can also be specified:
 ```
 
 The bounds can be express with the following keys under the ```range``` subkey:
+
 ```gt```: greater than
 ```gte```: greater than or equal to
 ```lt```: less than
