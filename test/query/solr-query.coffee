@@ -11,8 +11,9 @@ translations =
   basic: 'name:"Bill"'
   typeless: '(*:* NOT location:"Los Angeles")'
   multimatch: 'name:("Bill" OR "Will")'
-  null: "(*:* NOT name:[* TO *])"
-  range: "age:[20 TO 30]"
+  null: '(*:* NOT name:[* TO *])'
+  range: 'age:[20 TO 30]'
+  rangeEx: 'age:([20 TO 30] NOT 20 NOT 30)'
   singleBoundRange: "age:[20 TO *]"
   regexp: 'name:/.*[wb]ill.*/'
 translations.compound =
@@ -26,7 +27,8 @@ negatedTrans =
   typeless: 'location:"Los Angeles"'
   multimatch: '(*:* NOT name:("Bill" OR "Will"))'
   null: "name:[* TO *]"
-  range: "(*:* NOT age:[20 TO 30])"
+  range: '(*:* NOT age:[20 TO 30])'
+  rangeEx: '(*:* NOT age:([20 TO 30] NOT 20 NOT 30))'
   singleBoundRange: "(*:* NOT age:[20 TO *])"
   regexp: '(*:* NOT name:/.*[wb]ill.*/)'
 negatedTrans.compound =
@@ -72,6 +74,12 @@ describe 'Solr query tests', () ->
 
   it 'should translate a negated range query', () ->
     testNegatedQuery 'range'
+
+  it 'should translate an exclusive range query', () ->
+    testQuery 'rangeEx'
+
+  it 'should translate a negated exclusive range query', () ->
+    testNegatedQuery 'rangeEx'
 
   it 'should translate a single bound range query', () ->
     testQuery 'singleBoundRange'

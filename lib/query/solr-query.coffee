@@ -32,9 +32,17 @@ class SolrQuery extends DBQuery
     return qstr
 
   buildRangeMatchImpl: (q) =>
-    min = q.range.min or '*'
-    max = q.range.max or '*'
-    qstr = "#{q.field}:[#{min} TO #{max}]"
+    lte = q.range.lte or q.range.lt or '*'
+    gte = q.range.gte or q.range.gt or '*'
+    rangeStr = "[#{gte} TO #{lte}]"
+    if q.range.lt? or q.range.gt?
+      conds = [rangeStr]
+      if q.range.gt?
+        conds.push 'NOT ' + q.range.gt
+      if q.range.lt?
+        conds.push 'NOT ' + q.range.lt
+      rangeStr = '(' + conds.join(' ') + ')'
+    qstr = q.field + ":" + rangeStr
     qstr = @negateQuery qstr if q.negate
     return qstr
 
