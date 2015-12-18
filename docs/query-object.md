@@ -157,6 +157,24 @@ Compound queries exist to support ```AND``` and ```OR``` conditionals for querie
 }
 ```
 
+### Raw Queries
+
+Raw queries can be passed to the data backed untouched by translation, for special features not explicitly supported by Franca.
+
+Mongo example:
+
+```json
+{
+  "type": "RAW",
+  "raw": {
+    "date": {
+      "$type": 17
+    }
+  }
+}
+
+When translated into a Mongo query, the above query will filter for rows where date is a BSON Timestamp object.
+
 
 ## Negating Queries
 
@@ -179,3 +197,4 @@ The one exception is empty queries. Since they match anything, the negation woul
   }]
 }
 ```
+
