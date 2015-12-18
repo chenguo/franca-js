@@ -27,13 +27,20 @@ range =
   type: TYPES.Q
   field: 'age'
   range:
-    min: 20
-    max: 30
+    gte: 20
+    lte: 30
+
+rangeExclusive =
+  type: TYPES.Q
+  field: 'age'
+  range:
+    gt: 20
+    lt: 30
 
 singleBoundRange =
   type: TYPES.Q
   field: 'age'
-  range: min: 20
+  range: gte: 20
 
 regexp =
   type: TYPES.Q
@@ -63,6 +70,7 @@ module.exports =
   multimatch: multimatch
   null: nullQuery
   range: range
+  rangeEx: rangeExclusive
   singleBoundRange: singleBoundRange
   regexp: regexp
   compound: compound

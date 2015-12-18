@@ -24,6 +24,11 @@ translations =
       age: $gte: 20
     , age: $lte: 30
     ]
+  rangeEx:
+    $and: [
+      age: $gt: 20
+    , age: $lt: 30
+    ]
   singleBoundRange:
     age: $gte: 20
 translations.compound =
@@ -48,6 +53,11 @@ negatedTrans =
     $or: [
       age: $lt: 20
     , age: $gt: 30
+    ]
+  rangeEx:
+    $or: [
+      age: $lte: 20
+    , age: $gte: 30
     ]
   singleBoundRange:
     age: $lt: 20
@@ -95,6 +105,12 @@ describe 'Mongo query tests', () ->
 
   it 'should translate a negated range query', () ->
     testNegatedQuery 'range'
+
+  it 'should translate an exclusive range query', () ->
+    testQuery 'rangeEx'
+
+  it 'should translate a negated exclusive range query', () ->
+    testNegatedQuery 'rangeEx'
 
   it 'should translate a single bound range query', () ->
     testQuery 'singleBoundRange'

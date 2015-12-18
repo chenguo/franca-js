@@ -33,19 +33,39 @@ class MongoQuery extends DBQuery
       cond[1][field] = $exists: false
       return $or: cond
 
-  buildRangeMatchImpl: (q) ->
-    min = q.range.min
-    max = q.range.max
-    field = q.field
-    queries = []
-    if min?
-      if q.negate then rq = $lt: min
-      else rq = $gte: min
-      queries.push _.set {}, field, rq
-    if max?
-      if q.negate then rq = $gt: max
-      else rq = $lte: max
-      queries.push _.set {}, field, rq
+  # Negate a Mongo range query
+  negateRangeQuery: (rq) ->
+    if rq.$gt?
+      return $lte: rq.$gt
+    else if rq.$gte?
+      return $lt: rq.$gte
+    else if rq.$lt?
+      return $gte: rq.$lt
+    else if rq.$lte?
+      return $gt: rq.$lte
+    throw new Error 'Invalid Mongo range query: ' + JSON.stringify rq
+
+  generateRangeQueries: (r) ->
+    rangeQueries = []
+    if r.gt? or r.gte?
+      if r.gt?
+        rq = $gt: r.gt
+      else
+        rq = $gte: r.gte
+      rangeQueries.push rq
+    if r.lt? or r.lte?
+      if r.lt?
+        rq = $lt: r.lt
+      else
+        rq = $lte: r.lte
+      rangeQueries.push rq
+    return rangeQueries
+
+  buildRangeMatchImpl: (q) =>
+    rangeQueries = @generateRangeQueries q.range
+    queries = rangeQueries.map (rq) =>
+      rq = @negateRangeQuery rq if q.negate
+      return _.set {}, q.field, rq
     if queries.length > 1
       if q.negate
         return $or: queries

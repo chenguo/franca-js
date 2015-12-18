@@ -69,7 +69,8 @@ class DBQuery
   # Query within a range
   buildRangeMatch: (q) ->
     if (q.range not instanceof Object) or not
-       (q.range.min? or q.range.max?)
+       (q.range.lt? or q.range.lte? or
+        q.range.gt? or q.range.gte?)
       throw new Error "Range query must contain min or max: " + q
     @buildRangeMatchImpl q
 
