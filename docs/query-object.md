@@ -58,13 +58,13 @@ The query specifies the logical portion of the query. There are several types of
 All queries except ```RAW``` types can be [negated](#query-negation)
 
 <a name="query-standard"/>
-#### Standard Queries
+### Standard Queries
 
 Several types of standard queries are supported.
 
 
 <a name="query-type-match"/>
-##### match
+#### match
 
 This is a value equality matching query. A ```field``` and a ```match``` key are required.
 
@@ -88,7 +88,7 @@ Matching multiple values is also supported:
 This translates into a query for rows there the field ```name``` is exactly "Bill" or "Sally".
 
 <a name="query-type-null"/>
-##### Null
+#### Null
 
 This is a special match that matches empty fields.
 
@@ -102,7 +102,7 @@ This is a special match that matches empty fields.
 This translates into a query for rows where the ```address``` field is empty. Semantically, for different databases this may mean different things. For instance, for Mongo we've decided this should match documents where ```address``` doesn't exist and documents where ```address``` has a ```null``` value.
 
 <a name="query-type-range"/>
-##### Range
+#### Range
 
 Range queries are for fields for which the underlying database supports a comparison based query, such as a greater than operation.
 
@@ -141,7 +141,7 @@ If both ```gt``` and ```gte``` or both ```lt``` and ```lte``` is specified, ther
 
 
 
-##### Regex Match
+#### Regex Match
 <a name="query-type-regex"/>
 Query a field with a regular expression.
 
@@ -167,18 +167,18 @@ The "/" characters surrounding the regular expression string is optional.
 ```
 
 <a name="query-type-text">
-##### Full Text search
+#### Full Text search
 
 When a standard type query is given with no field specified and a ```text``` field, it is a free text query. At the moment, translation of free text queries are not supported.
 
 <a name="qeury-type-empty">
-##### Empty Queries
+#### Empty Queries
 
 A standard query with non of the above supported keys is considered an empty query, matching everything. For example, for Mongo this is the ```{}``` query, and for Solr this is a ```*:*``` query.
 
 
 <a name="query-compound"/>
-#### Compound Queries
+### Compound Queries
 
 Compound queries exist to support ```AND``` and ```OR``` conditionals for queries. A ```queries``` key is required, and should be an array of nested query objects. Nested query objects can also be compound queries, allowing arbitrarily complex conditional queries.
 
@@ -206,7 +206,7 @@ Compound queries exist to support ```AND``` and ```OR``` conditionals for querie
 ```
 
 <a name="query-raw"/>
-#### Raw Queries
+### Raw Queries
 
 Raw queries can be passed to the data backed untouched by translation, for special features not explicitly supported by Franca.
 
