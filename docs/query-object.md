@@ -52,10 +52,11 @@ The query object has two main components:
 
 The query specifies the logical portion of the query. There are several types of queries as specified by the top-level ```type``` key, which determines how a query is handled.
 
-* **Q**: indicates this query is one of several types of standard queries. If no type is specified, the query defaults to this type.
-* **AND**, **OR**: indicates a compound query, with nested subqueries
-* **RAW**: indicates a raw query that will be untouched during translation
+* [Q](#query-standard): indicates this query is one of several types of standard queries. If no type is specified, the query defaults to this type.
+* [AND/OR](#query-compound): indicates a compound query, with nested subqueries
+* [RAW](#query-raw): indicates a raw query that will be untouched during translation
 
+All queries except ```RAW``` types can be [negated](#query-negation)
 
 ### Standard Queries
 
