@@ -2,6 +2,17 @@
 
 This is a library meant to make it easy to get and view data from different backends. Queries are encoded in a common JSON format that can be translated for use with different data backend sources, such as Mongo or Solr.
 
+## Install
+
+```
+npm install franca-js
+```
+
+## Usage
+
+```coffee-script
+franca = require 'franca-js
+
 
 ## Overview
 
@@ -20,4 +31,3 @@ The common query format is a JSON object that incorporates basics data query log
 (TODO)
 
 The query parser translates from a string (for example, from a user typing into an input box) into the common JSON format.
-
