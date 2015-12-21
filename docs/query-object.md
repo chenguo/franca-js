@@ -3,18 +3,21 @@
 The Franca query object is a common representation for basic data filters and ancillary options that most data resources provide. This object is intended to be translatable into native queries for supported backends.
 
 ## Table of Contents
+* [Overview](#overview)
 * [Query](#query)
   * [Standard](#query-standard)
     * [match](#query-type-match)
     * [null](#query-type-null)
     * [range](#query-type-range)
     * [regex](#query-type-regex)
-    * [free text]#(query-type-text)
-    * [empty]#(query-type-empty)
+    * [free text](#query-type-text)
+    * [empty](#query-type-empty)
   * [Compound](#query-compound)
   * [Raw](#query-raw)
 
 
+<a name="overview"/>
+## Overview
 Example:
 
 ```json
@@ -216,6 +219,7 @@ Mongo example:
     }
   }
 }
+```
 
 When translated into a Mongo query, the above query will filter for rows where date is a BSON Timestamp object.
 
