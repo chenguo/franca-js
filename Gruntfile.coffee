@@ -9,7 +9,7 @@ module.exports = (grunt) ->
           reporter: 'spec'
           queit: false
           clearRequireCache: false
-        src: ['test/*/*.coffee']
+        src: ['test/*.coffee', 'test/*/*.coffee']
 
   grunt.registerTask 'default', 'mochaTest'
 

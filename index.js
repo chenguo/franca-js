@@ -1,6 +1,9 @@
 require('coffee-script')
+convert = require('./lib/convert')
 
 module.exports = {
   query: require('./lib/query'),
-  convert: require('./lib/convert')
+  TYPES: require('./lib/query/common').TYPES,
+  convert: convert,
+  toMongo: convert.toMongo
 }
