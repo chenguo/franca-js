@@ -38,8 +38,8 @@ negatedTrans.nestedCompound =
 
 # Pre-pend 'q=' for Solr query
 querify = (q) -> 'q=' + q
-negatedTrans  =_.mapValues negatedTrans, querify
-translations = _.mapValues translations, querify
+# negatedTrans  =_.mapValues negatedTrans, querify
+# translations = _.mapValues translations, querify
 
 testQuery = common.makeTester queries, solrQuery.toNative, translations
 testNegatedQuery = common.makeNegateQueryTester queries, solrQuery.toNative, negatedTrans
@@ -104,21 +104,21 @@ describe 'Solr query tests', () ->
       field: 'name'
       regexp: '/bill/'
     translated = solrQuery.toNative query
-    expected = 'q=name:/.*bill.*/'
+    expected = 'name:/.*bill.*/'
     expected.should.be.equal translated
 
     query =
       field: 'name'
       regexp: '/^bill/'
     translated = solrQuery.toNative query
-    expected = 'q=name:/bill.*/'
+    expected = 'name:/bill.*/'
     expected.should.be.equal translated
 
     query =
       field: 'name'
       regexp: '/bill$/'
     translated = solrQuery.toNative query
-    expected = 'q=name:/.*bill/'
+    expected = 'name:/.*bill/'
     expected.should.be.equal translated
 
   it "should translate regex queries without explicit '/' characters", () ->
@@ -126,7 +126,7 @@ describe 'Solr query tests', () ->
       field: 'name'
       regexp: '^bill'
     translated = solrQuery.toNative query
-    expected = 'q=name:/bill.*/'
+    expected = 'name:/bill.*/'
     expected.should.be.equal translated
 
   it 'should translate regex queries with some JS style character classes', () ->
@@ -134,21 +134,21 @@ describe 'Solr query tests', () ->
       field: 'address'
       regexp: '/^\\d{1,3} /'
     translated = solrQuery.toNative query
-    expected = 'q=address:/[0-9]{1,3} .*/'
+    expected = 'address:/[0-9]{1,3} .*/'
     expected.should.be.equal translated
 
     query =
       field: 'address'
       regexp: '/^\\D{1,3} /'
     translated = solrQuery.toNative query
-    expected = 'q=address:/[^0-9]{1,3} .*/'
+    expected = 'address:/[^0-9]{1,3} .*/'
     expected.should.be.equal translated
 
     query =
       field: 'address'
       regexp: '/^\\w{3,5}$/'
     translated = solrQuery.toNative query
-    expected = 'q=address:/[A-Za-z0-9_]{3,5}/'
+    expected = 'address:/[A-Za-z0-9_]{3,5}/'
     expected.should.be.equal translated
 
   it 'should translate a compound query', () ->
