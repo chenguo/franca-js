@@ -14,6 +14,7 @@ The Franca query object is a common representation for basic data filters and an
     * [empty](#query-type-empty)
   * [Compound](#query-compound)
   * [Raw](#query-raw)
+  * [Negating Queries](#query-negation)
 
 
 <a name="overview"/>
@@ -223,7 +224,7 @@ Mongo example:
 
 When translated into a Mongo query, the above query will filter for rows where date is a BSON Timestamp object.
 
-
+<a name="query-negation"/>
 ## Negating Queries
 
 ```Q```, ```AND```, and ```OR``` can be negated by adding a ```negate``` field and setting that to true.
