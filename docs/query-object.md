@@ -14,8 +14,7 @@ The Franca query object is a common representation for basic data filters and an
     * [empty](#query-type-empty)
   * [Compound](#query-compound)
   * [Raw](#query-raw)
-  * [Negating Queries](#query-negation)
-
+* [Negating Queries](#query-negation)
 
 <a name="overview"/>
 ## Overview
@@ -59,7 +58,7 @@ The query specifies the logical portion of the query. There are several types of
 All queries except ```RAW``` types can be [negated](#query-negation)
 
 <a name="query-standard"/>
-### Standard Queries
+#### Standard Queries
 
 Several types of standard queries are supported.
 
@@ -179,7 +178,7 @@ A standard query with non of the above supported keys is considered an empty que
 
 
 <a name="query-compound"/>
-### Compound Queries
+#### Compound Queries
 
 Compound queries exist to support ```AND``` and ```OR``` conditionals for queries. A ```queries``` key is required, and should be an array of nested query objects. Nested query objects can also be compound queries, allowing arbitrarily complex conditional queries.
 
@@ -207,7 +206,7 @@ Compound queries exist to support ```AND``` and ```OR``` conditionals for querie
 ```
 
 <a name="query-raw"/>
-### Raw Queries
+#### Raw Queries
 
 Raw queries can be passed to the data backed untouched by translation, for special features not explicitly supported by Franca.
 
