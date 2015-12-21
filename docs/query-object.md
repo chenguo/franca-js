@@ -58,6 +58,7 @@ The query specifies the logical portion of the query. There are several types of
 
 All queries except ```RAW``` types can be [negated](#query-negation)
 
+<a name="query-standard"/>
 ### Standard Queries
 
 Several types of standard queries are supported.
