@@ -1,6 +1,6 @@
 {
   "name": "franca-js",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "author": "chen.guo.0625@gmail.com",
   "description": "Common query abstraction for multiple data backends",
   "repository": {
@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "coffee-script": "~1.6.3",
-    "lodash": "3.10.1"
+    "lodash": "3.10.1",
+    "qs": "5.2.0"
   },
   "scripts": {
     "prepublish": "grunt"

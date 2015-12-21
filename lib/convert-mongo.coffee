@@ -4,7 +4,6 @@ options = require './options'
 
 
 module.exports =
-
   toMongo: (q) ->
     q = common.preprocess q
     converted =

@@ -5,5 +5,6 @@ module.exports = {
   query: require('./lib/query'),
   TYPES: require('./lib/query/common').TYPES,
   convert: convert,
-  toMongo: convert.toMongo
+  toMongo: convert.toMongo,
+  toSolr: convert.toSolr
 }

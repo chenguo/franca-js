@@ -21,9 +21,13 @@ translations =
     options:
       skip: 50
       limit: 10
+  solr: 'q=price:[* TO 100]&start=50&rows=10'
+
 
 describe 'Integration tests', () ->
 
   it 'translate to Mongo query', () ->
     common.testTranslation franca.toMongo, translations.mongo, sampleQuery
 
+  it 'translate to Solr query', () ->
+    common.testTranslation franca.toSolr, translations.solr, sampleQuery
