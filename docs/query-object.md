@@ -255,6 +255,7 @@ The one exception is empty queries. Since they match anything, the negation woul
 }
 ```
 
+<a name="options"/>
 ## Query Options
 
 The ```options``` key of a query is intended to cover the non-core-logic portion of a DB query. The follow option keys are supported:
@@ -263,6 +264,7 @@ The ```options``` key of a query is intended to cover the non-core-logic portion
 * **limit**: the max number of rows to return. Analogous to SQL's ```LIMIT```
 * **sort**: specify the field(s) to sort on. Can be specified in both array form and object form, similar to how Mongo's Node driver accepts sort options.
 
+<a name="options-offset"/>
 #### Offset
 
 Specify the number of rows to skip from the query's result.
@@ -282,6 +284,7 @@ Specify the number of rows to skip from the query's result.
 
 The above query returns rows where the ```name``` field is not empty, starting from the 101st row found by the BD.
 
+<a name="options-limit"/>
 #### Limit
 
 Specify the maximum number of rows to return
@@ -300,6 +303,7 @@ Specify the maximum number of rows to return
 
 The above query returns up to 30 rows where the ```address``` field contains the token "Main".
 
+<a name="options-sort">
 #### Sort
 
 THe sort option determines the order in which results are returned. This field can take both an object or an array.
