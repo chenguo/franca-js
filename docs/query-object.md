@@ -15,6 +15,10 @@ The Franca query object is a common representation for basic data filters and an
   * [Compound](#query-compound)
   * [Raw](#query-raw)
 * [Negating Queries](#query-negation)
+* [Query Options](#options)
+  * [offset](#option-offset)
+  * [limit](#option-limit)
+  * [sort](#option-sort)
 
 <a name="overview"/>
 ## Overview
@@ -45,17 +49,19 @@ The query object has two main components:
 **query** or **filter**: the logical filters for the query, which may include things like equality checks and and/or logic. For example, in SQL this is what's captured in the ```WHERE``` clause.
 **options**: non-logical query options, such as the number of rows to skip or which columns to sort on.
 
+If neither of the above keys are explicitly stated, the query object is assumed to be solely a logical query (i.e. what would go under the ```query``` subkey).
+
 
 <a name="query"/>
 ## Query
 
 The query specifies the logical portion of the query. There are several types of queries as specified by the top-level ```type``` key, which determines how a query is handled.
 
-* [Q](#query-standard): indicates this query is one of several types of standard queries. If no type is specified, the query defaults to this type.
+* [Q](#query-standard): indicates this query is one of several types of standard queries
 * [AND/OR](#query-compound): indicates a compound query, with nested subqueries
 * [RAW](#query-raw): indicates a raw query that will be untouched during translation
 
-All queries except ```RAW``` types can be [negated](#query-negation)
+By default, ```Q``` is assumed. All queries except ```RAW``` types can be [negated](#query-negation)
 
 <a name="query-standard"/>
 ### Standard Queries
@@ -166,6 +172,7 @@ The "/" characters surrounding the regular expression string is optional.
 }
 ```
 
+
 <a name="query-type-text">
 #### Full Text search
 
@@ -247,3 +254,82 @@ The one exception is empty queries. Since they match anything, the negation woul
   }]
 }
 ```
+
+## Query Options
+
+The ```options``` key of a query is intended to cover the non-core-logic portion of a DB query. The follow option keys are supported:
+
+* **offset**: how many rows to skip in the list of returned results. Analagous to SQL's ```OFFSET```
+* **limit**: the max number of rows to return. Analogous to SQL's ```LIMIT```
+* **sort**: specify the field(s) to sort on. Can be specified in both array form and object form, similar to how Mongo's Node driver accepts sort options.
+
+#### Offset
+
+Specify the number of rows to skip from the query's result.
+
+```json
+{
+  "options": {
+    "offset": 100
+  },
+  "query": {
+    "field": "name",
+    "negate": true,
+    "null": true
+  }
+}
+```
+
+The above query returns rows where the ```name``` field is not empty, starting from the 101st row found by the BD.
+
+#### Limit
+
+Specify the maximum number of rows to return
+
+```json
+{
+  "options": {
+    "limit": 30
+  },
+  "query": {
+    "field": "address",
+    "regexp": "Main"
+  }
+}
+```
+
+The above query returns up to 30 rows where the ```address``` field contains the token "Main".
+
+#### Sort
+
+THe sort option determines the order in which results are returned. This field can take both an object or an array.
+
+
+
+```json
+{
+  "options": {
+    "sort": [["height", 1], ["weight", -1]]
+  }
+}
+```
+
+```json
+{
+  "query": {},
+  "options": {
+    "sort": {
+      "height": 1,
+      "weight": -1
+    }
+  }
+}
+
+```
+
+Both of the above queries returns all rows, sorted by height in ascending order and weight in descending order. WHen specified in the array format, the order in which sort logic is applied is maintained (i.e. "height" before "weight" in this exampe). When specified in the object format, application order is not guaranteed and is dependent on the underlying JS runtime's object key sort order.
+
+The following values can be used to specify sort order (case insensitive):
+
+* 1, "1", "asc", "ascending": ascending order
+* -1, "-1", "desc", "descending": descending order
