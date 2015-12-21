@@ -8,7 +8,8 @@ class SolrQuery extends DBQuery
   toNative: (query) =>
     query = @objectify query
     solrQuery = @buildQuery query
-    return solrQuery
+    qstr = 'q=' + solrQuery
+    return qstr
 
   negateQuery: (qstr) ->
     qstr = '(*:* NOT ' + qstr + ')'
@@ -103,6 +104,7 @@ class SolrQuery extends DBQuery
     rawQuery = q.raw
     if 'string' is not typeof rawQuery
       throw new Error 'Raw Solr query is not a string: ' + rawQuery
+    rawQuery = rawQuery.replace /^q=/, ''
     return rawQuery
 
   buildEmptyImpl: (q) ->
