@@ -1,10 +1,10 @@
 require 'should'
 _ = require 'lodash'
 r = require('app-root-path').require
-common = require './common'
 queries = require './queries'
 types = r('lib/query/common').TYPES
-solrQuery = r('lib/query/solr-query')
+solrQuery = r 'lib/query/solr-query'
+common = r 'test/common'
 
 
 translations =
@@ -38,7 +38,7 @@ negatedTrans.nestedCompound =
   '(' + negatedTrans.basic + ' AND ' + negatedTrans.compound + ')'
 
 testQuery = common.makeTester queries, solrQuery.toNative, translations
-testNegatedQuery = common.makeNegateTester queries, solrQuery.toNative, negatedTrans
+testNegatedQuery = common.makeNegateQueryTester queries, solrQuery.toNative, negatedTrans
 
 describe 'Solr query tests', () ->
 

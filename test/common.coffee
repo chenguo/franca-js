@@ -9,14 +9,14 @@ negateQuery = (q) ->
 module.exports =
   negateSpec: negateQuery
 
-  makeTester: (queries, translator, translations) ->
+  makeTester: (tests, translator, translations) ->
     return (key) ->
-      query = queries[key]
+      test = tests[key]
       expected = translations[key]
-      translated = translator query
+      translated = translator test
       expected.should.be.eql translated
 
-  makeNegateTester: (queries, translator, negatedTranslations) ->
+  makeNegateQueryTester: (queries, translator, negatedTranslations) ->
     return (key) ->
       query = negateQuery queries[key]
       expected = negatedTranslations[key]

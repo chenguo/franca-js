@@ -1,10 +1,10 @@
 require 'should'
 _ = require 'lodash'
 r = require('app-root-path').require
-common = require './common'
 queries = require './queries'
 types = r('lib/query/common').TYPES
-mongoQuery = r('lib/query/mongo-query')
+mongoQuery = r 'lib/query/mongo-query'
+common = r 'test/common'
 
 # Translations
 translations =
@@ -69,7 +69,7 @@ negatedTrans.nestedCompound =
 
 
 testQuery = common.makeTester queries, mongoQuery.toNative, translations
-testNegatedQuery = common.makeNegateTester queries, mongoQuery.toNative, negatedTrans
+testNegatedQuery = common.makeNegateQueryTester queries, mongoQuery.toNative, negatedTrans
 
 describe 'Mongo query tests', () ->
 
