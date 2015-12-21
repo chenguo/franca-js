@@ -16,9 +16,9 @@ The Franca query object is a common representation for basic data filters and an
   * [Raw](#query-raw)
 * [Negating Queries](#query-negation)
 * [Query Options](#options)
-  * [offset](#option-offset)
-  * [limit](#option-limit)
-  * [sort](#option-sort)
+  * [offset](#options-offset)
+  * [limit](#options-limit)
+  * [sort](#options-sort)
 
 <a name="overview"/>
 ## Overview
