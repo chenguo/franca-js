@@ -80,6 +80,14 @@ class DBQuery
       throw new Error 'Invalid regular expression query: ' + q.regexp
     @buildRegexMatchImpl q
 
+  getRegexStr: (reg) ->
+    if reg instanceof RegExp
+      reg = reg.toString()
+    else
+      reg = '/' + reg if reg[0] isnt '/'
+      reg = reg + '/' if reg[reg.length - 1] isnt '/'
+    return reg
+
   # Full text search query
   buildFullTextSearch: @::notImplemented
 

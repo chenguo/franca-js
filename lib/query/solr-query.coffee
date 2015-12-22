@@ -83,13 +83,8 @@ class SolrQuery extends DBQuery
     return regStr
 
   buildRegexMatchImpl: (q) ->
-    reg = q.regexp
-    if q.regexp instanceof RegExp
-      reg = q.regexp.toString()
-    else
-      reg = '/' + reg if reg[0] isnt '/'
-      reg = reg + '/' if reg[reg.length - 1] isnt '/'
-    qstr = q.field + ':' + @translateRegex reg
+    regStr = @getRegexStr q.regexp
+    qstr = q.field + ':' + @translateRegex regStr
     qstr = @negateQuery qstr if q.negate
     return qstr
 
