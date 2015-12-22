@@ -23,12 +23,12 @@ queryObj =
     field: 'age'
     match: gt: 21
 
-qs = franca.toSolr queryObj
+solrQuery = franca.toSolr queryObj
 
 # prints q=age:([21 TO *] NOT 21)&rows=20
-console.log qs
+console.log solrQuery
 
-solrClient.get 'query', qs, (err, resp) ->
+solrClient.get 'query', solrQuery, (err, resp) ->
   # handle GET response
 
 ```
