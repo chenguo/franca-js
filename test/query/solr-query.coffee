@@ -17,6 +17,13 @@ translations =
   rangeEx: 'age:([20 TO 30] NOT 20 NOT 30)'
   singleBoundRange: "age:[20 TO *]"
   regexp: 'name:/.*[wb]ill.*/'
+  noAnchorRegexp: 'name:/.*bill.*/'
+  startAnchorRegexp: 'name:/bill.*/'
+  endAnchorRegexp: 'name:/.*bill/'
+  noSlashRegexp: 'name:/bill.*/'
+  numRegexp: 'address:/[0-9]{1,3} .*/'
+  nonNumRegexp: 'address:/[^0-9]{1,3} .*/'
+  wordCharsRegexp: 'address:/[A-Za-z0-9_]{3,5}/'
 translations.compound =
   '(' + translations.singleBoundRange + ' AND ' + translations.typeless + ')'
 translations.nestedCompound =
@@ -96,56 +103,17 @@ describe 'Solr query tests', () ->
     testNegatedQuery 'regexp'
 
   it 'should translate an anchored regex query ', () ->
-    query =
-      field: 'name'
-      regexp: '/bill/'
-    translated = toSolr query
-    expected = 'name:/.*bill.*/'
-    expected.should.be.equal translated
-
-    query =
-      field: 'name'
-      regexp: '/^bill/'
-    translated = toSolr query
-    expected = 'name:/bill.*/'
-    expected.should.be.equal translated
-
-    query =
-      field: 'name'
-      regexp: '/bill$/'
-    translated = toSolr query
-    expected = 'name:/.*bill/'
-    expected.should.be.equal translated
+    testQuery 'noAnchorRegexp'
+    testQuery 'startAnchorRegexp'
+    testQuery 'endAnchorRegexp'
 
   it "should translate regex queries without explicit '/' characters", () ->
-    query =
-      field: 'name'
-      regexp: '^bill'
-    translated = toSolr query
-    expected = 'name:/bill.*/'
-    expected.should.be.equal translated
+    testQuery 'noSlashRegexp'
 
   it 'should translate regex queries with some JS style character classes', () ->
-    query =
-      field: 'address'
-      regexp: '/^\\d{1,3} /'
-    translated = toSolr query
-    expected = 'address:/[0-9]{1,3} .*/'
-    expected.should.be.equal translated
-
-    query =
-      field: 'address'
-      regexp: '/^\\D{1,3} /'
-    translated = toSolr query
-    expected = 'address:/[^0-9]{1,3} .*/'
-    expected.should.be.equal translated
-
-    query =
-      field: 'address'
-      regexp: '/^\\w{3,5}$/'
-    translated = toSolr query
-    expected = 'address:/[A-Za-z0-9_]{3,5}/'
-    expected.should.be.equal translated
+    testQuery 'numRegexp'
+    testQuery 'nonNumRegexp'
+    testQuery 'wordCharsRegexp'
 
   it 'should translate a compound query', () ->
     testQuery 'compound'
