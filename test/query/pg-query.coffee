@@ -16,6 +16,20 @@ translations =
   range: 'age BETWEEN 20 AND 30'
   rangeEx: 'age > 20 AND age < 30'
   singleBoundRange: 'age >= 20'
+  regexp: "name ~* '[wb]ill'"
+  noAnchorRegexp: "name ~ 'bill'"
+  startAnchorRegexp: "name ~ '^bill'"
+  endAnchorRegexp: "name ~ 'bill$'"
+  noSlashRegexp: "name ~ '^bill'"
+  numRegexp: "address ~ '^\\d{1,3} '"
+  nonNumRegexp: "address ~ '^\\D{1,3} '"
+  wordCharsRegexp: "address ~ '^\\w{3,5}$'"
+translations.compound =
+  '(' + translations.singleBoundRange + ' AND ' + translations.typeless + ')'
+translations.nestedCompound =
+  '(' + translations.basic + ' OR ' +  translations.compound + ')'
+
+#translations.compound =
 
 negatedTrans =
   basic: "name != 'Bill'"
@@ -25,6 +39,11 @@ negatedTrans =
   range: 'age NOT BETWEEN 20 AND 30'
   rangeEx: 'age <= 20 OR age >= 30'
   singleBoundRange: 'age < 20'
+  regexp: "name !~* '[wb]ill'"
+negatedTrans.compound =
+  '(' + negatedTrans.singleBoundRange + ' OR ' + negatedTrans.typeless + ')'
+negatedTrans.nestedCompound =
+  '(' + negatedTrans.basic + ' AND ' + negatedTrans.compound + ')'
 
 testQuery = common.makeTester queries, toPg, translations
 testNegatedQuery = common.makeNegateQueryTester queries, toPg, negatedTrans
@@ -76,3 +95,36 @@ describe 'Postgres query tests', () ->
 
   it 'should translate a negated single bound range query', () ->
     testNegatedQuery 'singleBoundRange'
+
+  it 'should translate a regex query', () ->
+    testQuery 'regexp'
+
+  it 'should translate a negated regex query', () ->
+    testNegatedQuery 'regexp'
+
+  it 'should translate an anchored regex query ', () ->
+    testQuery 'noAnchorRegexp'
+    testQuery 'startAnchorRegexp'
+    testQuery 'endAnchorRegexp'
+
+  it "should translate regex queries without explicit '/' characters", () ->
+    testQuery 'noSlashRegexp'
+
+  it 'should translate regex queries with some JS style character classes', () ->
+    testQuery 'numRegexp'
+    testQuery 'nonNumRegexp'
+    testQuery 'wordCharsRegexp'
+
+  it 'should translate a compound query', () ->
+    testQuery 'compound'
+
+  it 'should translate a negated compound query', () ->
+    testNegatedQuery 'compound'
+
+  it 'should translate a raw query', () ->
+    rawQuery =
+      type: types.RAW
+      raw: translations.nestedCompound
+    translated = toPg rawQuery
+    expected = translations.nestedCompound
+    expected.should.be.eql translated

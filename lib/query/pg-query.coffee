@@ -15,10 +15,12 @@ class PGQuery extends DBQuery
   IS = 'IS'
   NOT_BETWEEN = 'NOT BETWEEN'
   NOT_EQ = '!='
-  NOT_IS = 'IS NOT'
-  NOT = 'NOT'
   NOT_IN = 'NOT IN'
+  NOT_IS = 'IS NOT'
+  NOT_REG = '!~'
+  NOT = 'NOT'
   NULL = 'NULL'
+  REG = '~'
 
   toNative: (query) =>
     query = @objectify query
@@ -116,6 +118,39 @@ class PGQuery extends DBQuery
       conds = @rangeConds(range).map (@rangeCondNegater q.negate)
       qstr = @rangeStrFormatter q.field, q.negate, conds
     return qstr
+
+  # Strip '/' chars, wrap with single quotes
+  formatRegStr: (regStr) ->
+    regStr = regStr.replace /^\/|\/$/g, ''
+    regStr = "'#{regStr}'"
+    return regStr
+
+  translateRegex: (regStr) ->
+    # regStr = @translateAnchors regStr
+    # regStr = @translateCharacterClasses regStr
+    regStr = @formatRegStr regStr
+    return regStr
+
+  buildRegexMatchImpl: (q) ->
+    regStr = @getRegexStr q.regexp
+    op = if q.negate then NOT_REG else REG
+    # Check existence first. undefined matches /i/ due to string coercion
+    if q.regFlags? and /i/.test q.regFlags then op += '*'
+    qstr = @tokenStr q.field, op, @translateRegex regStr
+    return qstr
+
+  buildCompoundImpl: (q) ->
+    if q.type is TYPES.AND then condOp = AND
+    else condOp = OR
+    conds = q.queries.map (query) => @buildQuery query
+    qstr = '(' + conds.join(" #{condOp} ") + ')'
+    return qstr
+
+  buildRawImpl: (q) ->
+    rawQuery = q.raw
+    if 'string' is not typeof rawQuery
+      throw new Error 'Raw Solr query is not a string: ' + rawQuery
+    return rawQuery
 
 
 pgQuery = new PGQuery
