@@ -41,7 +41,7 @@ class DBQuery
       query = @buildFullTextSearch q
     else
       query = @buildEmpty q
-    return query or {}
+    return if query? then query else {}
 
   notImplemented: ->
     throw new Error 'not implemented'

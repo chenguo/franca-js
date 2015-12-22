@@ -11,6 +11,8 @@ class MongoQuery extends DBQuery
     mongoQuery = @buildQuery query
     return mongoQuery
 
+  buildEmptyImpl: () -> {}
+
   buildMatchImpl: (q) ->
     fieldQ = if q.negate then $ne: q.match else q.match
     return _.set {}, q.field, fieldQ
@@ -100,7 +102,6 @@ class MongoQuery extends DBQuery
     else condOp = '$or'
     return _.set {}, condOp, q.queries.map (query) => @buildQuery query
 
-  buildEmptyImpl: (q) -> {}
 
 mongoQuery = new MongoQuery
 

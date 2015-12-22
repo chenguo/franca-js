@@ -14,6 +14,8 @@ class SolrQuery extends DBQuery
     qstr = '(*:* NOT ' + qstr + ')'
     return qstr
 
+  buildEmptyImpl: () -> return '*:*'
+
   buildMatchImpl: (q) =>
     qstr = q.field + ':"' + q.match + '"'
     qstr = @negateQuery qstr if q.negate
@@ -105,8 +107,6 @@ class SolrQuery extends DBQuery
       throw new Error 'Raw Solr query is not a string: ' + rawQuery
     return rawQuery
 
-  buildEmptyImpl: (q) ->
-    return '*:*'
 
 solrQuery = new SolrQuery
 
