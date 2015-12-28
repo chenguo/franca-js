@@ -2,7 +2,7 @@ require 'should'
 options = require './options'
 
 r = require('app-root-path').require
-solrOpts = r 'lib/options/solr-options'
+toSolr = r('lib/options').toSolr
 common = r 'test/common'
 
 
@@ -14,13 +14,12 @@ translations =
 
 translations.sortObj = translations.sortArr
 translations.combined =
-  combined:
-    start: 100
-    rows: 10
-    sort: translations.sortArr
+  start: 100
+  rows: 10
+  sort: translations.sortArr.sort
 
 
-testOptions = common.makeTester options, solrOpts.toSolr, translations
+testOptions = common.makeTester options, toSolr, translations
 
 describe 'Solr options tests', () ->
 
@@ -39,5 +38,5 @@ describe 'Solr options tests', () ->
   it 'should translate sort options given as object', () ->
     testOptions 'sortObj'
 
-  it 'should translate an offset options', () ->
-    testOptions 'empty'
+  it 'should translate combined options', () ->
+    testOptions 'combined'
