@@ -21,6 +21,7 @@ translations =
     options:
       skip: 50
       limit: 10
+  pg: 'WHERE price <= 100 OFFSET 50 LIMIT 10'
   solr: 'q=price:[* TO 100]&start=50&rows=10'
 
 
@@ -28,6 +29,9 @@ describe 'Integration tests', () ->
 
   it 'translate to Mongo query', () ->
     common.testTranslation franca.toMongo, translations.mongo, sampleQuery
+
+  it 'translate to Postgres query', () ->
+    common.testTranslation franca.toPg, translations.pg, sampleQuery
 
   it 'translate to Solr query', () ->
     common.testTranslation franca.toSolr, translations.solr, sampleQuery

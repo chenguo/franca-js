@@ -8,7 +8,10 @@ negateQuery = (q) ->
 
 testTranslation = (translator, expected, query) ->
   translated = translator query
-  expected.should.be.eql translated
+  if translated instanceof Object
+    expected.should.be.eql translated
+  else
+    expected.should.be.equal translated
 
 module.exports =
   negateSpec: negateQuery
