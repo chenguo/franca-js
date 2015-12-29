@@ -19,6 +19,7 @@ The Franca query object is a common representation for basic data filters and an
   * [offset](#options-offset)
   * [limit](#options-limit)
   * [sort](#options-sort)
+* [Extensions](#extensions)
 
 <a name="overview"/>
 ## Overview
@@ -337,3 +338,10 @@ The following values can be used to specify sort order (case insensitive):
 
 * 1, "1", "asc", "ascending": ascending order
 * -1, "-1", "desc", "descending": descending order
+
+
+
+<a name="extensions"/>
+## Extensions
+
+Some databases support extra settings, and they can be either required or optional. For example, because of the way SQL queries are structured, Node drivers require the table to be a part of the query itself, thus Franca queries for the SQL family of data resources require a table member. Please see [the SQL extentions documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-sql.md).
