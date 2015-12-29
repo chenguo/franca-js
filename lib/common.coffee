@@ -1,11 +1,18 @@
+canonicalizeOpts = (q) ->
+  opts = q.options or {}
+  # Ensure table is under options if it exists
+  opts.table = q.table if q.table?
+  return opts
+
+canonicalizeQuery = (q) ->
+  query = switch
+    when q.query? then q.query
+    when q.filter? then q.filter
+    else q
+
 module.exports =
   preprocess: (q) ->
-    opts = q.options
-    query = switch
-      when q.query? then q.query
-      when q.filter? then q.filter
-      else q
-    return {
-      query: query
-      options: opts
-    }
+    processed =
+      query: canonicalizeQuery q
+      options: canonicalizeOpts q
+    return processed
