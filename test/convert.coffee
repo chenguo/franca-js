@@ -1,4 +1,5 @@
 require 'should'
+_ = require 'lodash'
 
 r = require('app-root-path').require
 franca = r 'index'
@@ -14,6 +15,8 @@ sampleQuery =
     field: 'price'
     range: lte: 100
 
+testTable = 'tab'
+
 translations =
   mongo:
     query:
@@ -21,7 +24,7 @@ translations =
     options:
       skip: 50
       limit: 10
-  pg: 'WHERE price <= 100 OFFSET 50 LIMIT 10'
+  pg: "SELECT * FROM #{testTable} WHERE price <= 100 LIMIT 10 OFFSET 50"
   solr: 'q=price:[* TO 100]&start=50&rows=10'
 
 
@@ -31,7 +34,9 @@ describe 'Integration tests', () ->
     common.testTranslation franca.toMongo, translations.mongo, sampleQuery
 
   it 'translate to Postgres query', () ->
-    common.testTranslation franca.toPg, translations.pg, sampleQuery
+    pgQuery = _.cloneDeep sampleQuery
+    pgQuery.table = testTable
+    common.testTranslation franca.toPg, translations.pg, pgQuery
 
   it 'translate to Solr query', () ->
     common.testTranslation franca.toSolr, translations.solr, sampleQuery

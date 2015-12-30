@@ -1,21 +1,32 @@
 require 'should'
+_ = require 'lodash'
 options = require './options'
 
 r = require('app-root-path').require
 toPg = r('lib/options').toPg
 common = r 'test/common'
 
+testTable = 'pgTable'
 translations =
-  empty: ''
-  offset: 'OFFSET 100'
-  limit: 'LIMIT 10'
-  sortArr: 'ORDER BY name DESC, address ASC'
+  empty: FROM: testTable
+  offset:
+    FROM: testTable
+    OFFSET: 100
+  limit:
+    FROM: testTable
+    LIMIT: 10
+  sortArr:
+    FROM: testTable
+    'ORDER BY': 'name DESC, address ASC'
 
 translations.sortObj = translations.sortArr
 translations.combined =
-  translations.sortArr + ' ' + translations.offset + ' ' + translations.limit
+  _.merge {}, translations.sortArr, translations.limit, translations.offset
 
-testOptions = common.makeTester options, toPg, translations
+testOptions = (key) ->
+  testOpts = _.cloneDeep options[key]
+  testOpts.table = testTable
+  common.testTranslation toPg, translations[key], testOpts
 
 describe 'Postgres options tests', () ->
 

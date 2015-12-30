@@ -16,4 +16,3 @@ module.exports =
   sortArr: sortArr
   sortObj: sortObj
   combined: _.merge {}, offset, limit, sortArr
-
