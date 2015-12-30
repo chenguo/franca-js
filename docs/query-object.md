@@ -16,7 +16,7 @@ The Franca query object is a common representation for basic data filters and an
   * [Raw](#query-raw)
 * [Negating Queries](#query-negation)
 * [Query Options](#options)
-  * [columns](#options-columns)
+  * [fields](#options-fields)
   * [offset](#options-offset)
   * [limit](#options-limit)
   * [sort](#options-sort)
@@ -267,7 +267,7 @@ The ```options``` key of a query is intended to cover the non-core-logic portion
 * **sort**: specify the field(s) to sort on. Can be specified in both array form and object form, similar to how Mongo's Node driver accepts sort options.
 
 <a name="options-fields"/>
-#### Fields
+#### Fields / Columns
 
 Specify the fields (columns)  to return in the query.
 

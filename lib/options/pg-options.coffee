@@ -20,6 +20,13 @@ sortOptions = (opts) ->
     sortOpts['ORDER BY'] = sorts.join ', '
   return sortOpts
 
+columnOptions = (opts) ->
+  fields = {}
+  if opts.fields?
+    fieldStr = opts.fields.join ', '
+    fields.SELECT = fieldStr
+  return fields
+
 tableOptions = (opts) ->
   if opts.table?
     return FROM: opts.table
@@ -36,7 +43,8 @@ toPg = (opts) ->
   sortOpts = sortOptions opts
   joinOpts = joinOptions opts
   tableOpts = tableOptions opts
-  combined = _.merge {}, rowOpts, sortOpts, tableOpts, joinOpts
+  colOpts = columnOptions opts
+  combined = _.merge {}, rowOpts, sortOpts, colOpts, tableOpts, joinOpts
   return combined
 
 module.exports =

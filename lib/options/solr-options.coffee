@@ -18,13 +18,16 @@ sortOptions = (opts) ->
     sorts = orderings.map (order) -> order[0] + '+' + sortValue order[1]
     sortStr = sorts.join ','
     return sort: sortStr
-  else
-    return {}
+
+fieldOptions = (opts) ->
+  if opts.fields? and opts.fields instanceof Array
+    return fl: opts.fields.join ','
 
 toSolr = (opts) ->
   rowOpts = rowOptions opts
   sortOpts = sortOptions opts
-  solrOpts = _.merge rowOpts, sortOpts
+  fieldOpts = fieldOptions opts
+  solrOpts = _.merge rowOpts, sortOpts, fieldOpts
   return solrOpts
 
 module.exports =

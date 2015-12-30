@@ -2,6 +2,9 @@ canonicalizeOpts = (q) ->
   opts = q.options or {}
   # Ensure table is under options if it exists
   opts.table = q.table if q.table?
+  if opts.columns?
+    opts.fields = opts.columns
+    delete opts.columns
   return opts
 
 canonicalizeQuery = (q) ->

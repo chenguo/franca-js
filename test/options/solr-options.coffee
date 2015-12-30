@@ -10,12 +10,14 @@ translations =
   empty: {}
   offset: start: 100
   limit: rows: 10
+  fields: fl: 'volume,area,weight'
   sortArr: sort: 'name+desc,address+asc'
 
 translations.sortObj = translations.sortArr
 translations.combined =
   start: 100
   rows: 10
+  fl: translations.fields.fl
   sort: translations.sortArr.sort
 
 
@@ -31,6 +33,9 @@ describe 'Solr options tests', () ->
 
   it 'should translate a limit options', () ->
     testOptions 'limit'
+
+  it 'should translate a query for a subset of fields', () ->
+    testOptions 'fields'
 
   it 'should translate sort options given as array', () ->
     testOptions 'sortArr'

@@ -18,10 +18,19 @@ sortOptions = (opts) ->
   else
     return {}
 
+fieldOptions = (opts) ->
+  if opts.fields? and opts.fields instanceof Array
+    fieldOpts = _.reduce opts.fields, (fields, f) ->
+      fields[f] = 1
+      return fields
+    , {}
+    return fields: fieldOpts
+
 toMongo = (opts) ->
   rowOpts = rowOptions opts
   sortOpts = sortOptions opts
-  mongoOpts = _.merge rowOpts, sortOpts
+  fieldOpts = fieldOptions opts
+  mongoOpts = _.merge rowOpts, sortOpts, fieldOpts
   return mongoOpts
 
 module.exports =
