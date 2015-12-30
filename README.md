@@ -13,7 +13,7 @@ npm install franca-js
 Quick example for making a Solr query, assuming [solr-node-client](https://github.com/lbdremy/solr-node-client) is used.
 
 ```coffeescript
-franca = require 'franca-js`
+franca = require 'franca-js'
 solrClient = require 'configured-solr-client' # initialized solr-node-client
 
 # This can be generated on the UI or passed in from another module
