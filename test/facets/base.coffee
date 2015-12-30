@@ -1,6 +1,6 @@
 require 'should'
 r = require('app-root-path').require
-BaseFacet = r 'lib/facets/base-facet'
+BaseFacets = r 'lib/facets/base-facets'
 common = r 'test/common'
 testCases = require './test-cases'
 
@@ -8,30 +8,30 @@ canonicalOpts =
   basic:
     field: 'category'
     dir: -1
-    sortBy: BaseFacet::COUNT
+    sortBy: BaseFacets::COUNT
 
   countAsc:
     field: 'category'
     dir: 1
-    sortBy: BaseFacet::COUNT
+    sortBy: BaseFacets::COUNT
 
   byValue:
     field: 'category'
     dir: 1
-    sortBy: BaseFacet::VALUE
+    sortBy: BaseFacets::VALUE
 
   valueDesc:
     field: 'category'
     dir: -1
-    sortBy: BaseFacet::VALUE
+    sortBy: BaseFacets::VALUE
 
 
-baseFacet = new BaseFacet
+baseFacets = new BaseFacets
 
 testFacet = (key) ->
   testCase = testCases[key].facet
   expected = canonicalOpts[key]
-  common.testTranslation baseFacet.formatOpts, expected, testCase
+  common.testTranslation baseFacets.formatOpts, expected, testCase
 
 
 describe 'Base facet option canonicalization tests', () ->
