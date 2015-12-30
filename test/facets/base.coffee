@@ -1,6 +1,6 @@
 require 'should'
 r = require('app-root-path').require
-BaseFacet = r 'lib/facets/base-facet'
+BaseFacet = r 'lib/facet/base-facet'
 common = r 'test/common'
 testCases = require './test-cases'
 

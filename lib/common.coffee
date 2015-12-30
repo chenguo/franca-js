@@ -11,22 +11,37 @@ canonicalizeQuery = (q) ->
   query = switch
     when q.query? then q.query
     when q.filter? then q.filter
-    else q
+    when not q.facet? then q
+    else {}
+
+isAscVal = (v) ->
+  return switch v
+    when 1, '1', 'asc', 'ascending' then true
+    else false
+
+isDescVal = (v) ->
+  return switch v
+    when -1, '-1', 'desc', 'descending' then true
+    else false
 
 module.exports =
   preprocess: (q) ->
     processed =
       query: canonicalizeQuery q
       options: canonicalizeOpts q
+      facet: q.facet
     return processed
+
+  isAscVal: isAscVal
+  isDescVal: isDescVal
 
   makeSortValueFormatter: (ascVal, descVal) ->
     return (v) ->
       if typeof v is 'string'
         v = v.toLowerCase()
-      v = switch v
-        when 1, '1', 'asc', 'ascending' then ascVal
-        when -1, '-1', 'desc', 'descending' then descVal
+      v = switch
+        when isAscVal v then ascVal
+        when isDescVal v then descVal
         else
           throw new Error 'Invalid field sort direction: ' + v
       return v

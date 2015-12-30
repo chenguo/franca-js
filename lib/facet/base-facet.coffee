@@ -24,7 +24,12 @@ class BaseFacet
       when typeof sortOpts is 'number'
         sortDir = @parseSortDir sortOpts
       when typeof sortOpts is 'string'
-        sortBy = @parseSortBy sortOpts
+        if common.isAscVal sortOpts
+          sortDir = 1
+        else if common.isDescVal sortOpts
+          sortDir = -1
+        else
+          sortBy = @parseSortBy sortOpts
       when sortOpts instanceof Object
         if @COUNT of sortOpts
           sortBy = @COUNT
@@ -46,9 +51,9 @@ class BaseFacet
     facetSort = _.merge field: opts.field, sortOpts
     return facetSort
 
-  applyFacet: (facetOpts, queryComponents) ->
+  applyFacet: (queryComponents, facetOpts) =>
     facetOpts = @formatOpts facetOpts
-    @applyFacetImpl facetOpts, queryComponents
+    @applyFacetImpl queryComponents, facetOpts
 
 
 module.exports = BaseFacet
