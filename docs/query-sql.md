@@ -34,4 +34,3 @@ Both of the above would translate into ```SELECT * FROM sandwiches```
 <a name="join"/>
 
 Support for SQL JOIN operations are planned.
-

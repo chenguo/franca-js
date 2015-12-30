@@ -16,6 +16,7 @@ The Franca query object is a common representation for basic data filters and an
   * [Raw](#query-raw)
 * [Negating Queries](#query-negation)
 * [Query Options](#options)
+  * [columns](#options-columns)
   * [offset](#options-offset)
   * [limit](#options-limit)
   * [sort](#options-sort)
@@ -264,6 +265,26 @@ The ```options``` key of a query is intended to cover the non-core-logic portion
 * **offset**: how many rows to skip in the list of returned results. Analagous to SQL's ```OFFSET```
 * **limit**: the max number of rows to return. Analogous to SQL's ```LIMIT```
 * **sort**: specify the field(s) to sort on. Can be specified in both array form and object form, similar to how Mongo's Node driver accepts sort options.
+
+<a name="options-fields"/>
+#### Fields
+
+Specify the fields (columns)  to return in the query.
+
+```json
+{
+  "options": {
+    "fields": ["size", "price", "brand"]
+  },
+  "query": {
+    "field": "category",
+    "match": "soda"
+  }
+}
+```
+
+The above query only returns the ```size```, ```price```, and ```brand``` columns for rows where the ```category``` field has the value "soda".
+
 
 <a name="options-offset"/>
 #### Offset
