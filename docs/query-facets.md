@@ -68,7 +68,7 @@ The list of facets returned can be sorted. The default is to sort by facet count
 }
 ```
 
-It is also possible to sort by facet value and in ascending order via the ```facet.sort``` subkey. When specifying sorting by value, ascending is the default. The same values to specify sort direction for query options (-1/1, "asc"/"desc", "ascending"/"descending") can be used here.
+It is also possible to sort by facet value and in ascending order via the ```facet.sort``` subkey. When specifying sorting by value, ascending is the default. The same values to specify sort direction for query options (1/-1, "asc"/"desc", "ascending"/"descending") can be used here.
 
 facet.sort value | sorts by | order
 ---|---|---
@@ -104,7 +104,7 @@ The facet operation is available in conjunction with a query. For example:
 {
   "facet": {
     "field": "color"
-  }
+  },
   "query": {
     "field": "fruit",
     "match": "apple"
