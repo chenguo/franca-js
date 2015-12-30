@@ -28,7 +28,7 @@ translations =
   solr: 'q=price:[* TO 100]&start=50&rows=10'
 
 
-describe 'Integration tests', () ->
+describe 'General integration tests', () ->
 
   it 'translate to Mongo query', () ->
     common.testTranslation franca.toMongo, translations.mongo, sampleQuery
