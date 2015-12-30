@@ -16,6 +16,9 @@ Examples:
 ```json
 {
   "table": "sandwiches",
+  "options": {
+    "fields": ["bread", "cheese"]
+  }
 }
 ```
 
@@ -23,11 +26,12 @@ Examples:
 {
   "options": {
     "table": "sandwiches"
+    "fields": ["bread", "cheese"]
   }
 }
 ```
 
-Both of the above would translate into ```SELECT * FROM sandwiches```
+Both of the above would translate into ```SELECT bread, cheese FROM sandwiches```
 
 
 
