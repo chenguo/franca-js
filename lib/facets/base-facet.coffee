@@ -46,9 +46,9 @@ class BaseFacet
     facetSort = _.merge field: opts.field, sortOpts
     return facetSort
 
-  applyFacets: (facetOpts, queryComponents) ->
+  applyFacet: (facetOpts, queryComponents) ->
     facetOpts = @formatOpts facetOpts
-    @applyFacetsImpl facetOpts, queryComponents
+    @applyFacetImpl facetOpts, queryComponents
 
 
 module.exports = BaseFacet
