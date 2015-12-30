@@ -1,37 +1,36 @@
 _ = require 'lodash'
-common = require './common'
+DBOptions = require './db-options'
 
-rowOptions = (opts) ->
-  rowOpts = {}
-  unless isNaN opts.offset
-    rowOpts.skip = parseInt opts.offset
-  unless isNaN opts.limit
-    rowOpts.limit = parseInt opts.limit
-  return rowOpts
+class MongoOptions extends DBOptions
 
-sortValue = common.makeSortValueFormatter 1, -1
+  ASC: 1
+  DESC: -1
 
-sortOptions = (opts) ->
-  orderings = common.getSorts opts, sortValue
-  if orderings? and orderings.length > 0
-    return sort: orderings
-  else
-    return {}
+  rowOptions: (opts) ->
+    rowOpts = {}
+    unless isNaN opts.offset
+      rowOpts.skip = parseInt opts.offset
+    unless isNaN opts.limit
+      rowOpts.limit = parseInt opts.limit
+    return rowOpts
 
-fieldOptions = (opts) ->
-  if opts.fields? and opts.fields instanceof Array
-    fieldOpts = _.reduce opts.fields, (fields, f) ->
-      fields[f] = 1
-      return fields
-    , {}
-    return fields: fieldOpts
+  sortOptions: (opts) =>
+    orderings = @formatSortOpts  opts
+    if orderings? and orderings.length > 0
+      return sort: orderings
+    else
+      return {}
 
-toMongo = (opts) ->
-  rowOpts = rowOptions opts
-  sortOpts = sortOptions opts
-  fieldOpts = fieldOptions opts
-  mongoOpts = _.merge rowOpts, sortOpts, fieldOpts
-  return mongoOpts
+  fieldOptions: (opts) ->
+    if opts.fields? and opts.fields instanceof Array
+      fieldOpts = _.reduce opts.fields, (fields, f) ->
+        fields[f] = 1
+        return fields
+      , {}
+      return fields: fieldOpts
+
+
+mongoOptions = new MongoOptions
 
 module.exports =
-  toMongo: toMongo
+  toMongo: mongoOptions.convertOptions

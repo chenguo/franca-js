@@ -19,3 +19,14 @@ module.exports =
       query: canonicalizeQuery q
       options: canonicalizeOpts q
     return processed
+
+  makeSortValueFormatter: (ascVal, descVal) ->
+    return (v) ->
+      if typeof v is 'string'
+        v = v.toLowerCase()
+      v = switch v
+        when 1, '1', 'asc', 'ascending' then ascVal
+        when -1, '-1', 'desc', 'descending' then descVal
+        else
+          throw new Error 'Invalid field sort direction: ' + v
+      return v
