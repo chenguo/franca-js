@@ -1,6 +1,6 @@
 {
   "name": "franca-js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "chen.guo.0625@gmail.com",
   "description": "Common query abstraction for multiple data backends",
   "repository": {
