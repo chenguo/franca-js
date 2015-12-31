@@ -22,7 +22,6 @@ class PostgresFacet extends BaseFacet
     facetOpts.countField = "COUNT(#{facetOpts.field})"
     @applyFacetField queryComponents, facetOpts
     @applyFacetSort queryComponents, facetOpts
-
     return queryComponents
 
 
