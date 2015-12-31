@@ -1,7 +1,6 @@
 _ = require 'lodash'
 Qs = require 'qs'
-r = require('app-root-path').require
-components = r 'lib/components'
+components = require '../components'
 
 combineComponents = (components, encode) ->
   qStr = Qs.stringify components, encode: encode

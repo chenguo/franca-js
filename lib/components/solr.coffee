@@ -1,7 +1,5 @@
 _ = require 'lodash'
-r = require('app-root-path').require
-common = r 'lib/common'
-
+common = require '../common'
 facet = require './facet'
 query = require './query'
 options = require './options'

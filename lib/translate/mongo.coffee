@@ -1,5 +1,5 @@
 r = require('app-root-path').require
-components = r 'lib/components'
+components = require '../components'
 
 module.exports = (q) ->
   components = components.toMongo q
