@@ -1,4 +1,4 @@
-BaseOptions = require './base-options'
+BaseOptions = require './options'
 
 class SolrOptions extends BaseOptions
 

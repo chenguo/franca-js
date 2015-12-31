@@ -1,5 +1,5 @@
 _ = require 'lodash'
-BaseOptions = require './base-options'
+BaseOptions = require './options'
 
 class MongoOptions extends BaseOptions
 
