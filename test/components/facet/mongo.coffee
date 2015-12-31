@@ -35,16 +35,11 @@ translations =
   , $sort: _id: -1
   ]
 
+translations.withLimit =
+  translations.basic.concat [$limit: 100]
 translations.withQuery =
   [$match: difficulty: 'high'].concat translations.basic
 
-  # withQuery: [
-  #   $match: difficulty: 'high'
-  # , $group:
-  #     _id: '$category'
-  #     count: $sum: 1
-  # , $sort: count: -1
-  # ]
 
 facetTester = common.makeTester testCases, components.toMongo, translations
 
@@ -52,6 +47,9 @@ describe 'Mongo facet query tests', () ->
 
   it 'translate basic facet query', () ->
    facetTester 'basic'
+
+  it 'translate facet query with limit', () ->
+   facetTester 'withLimit'
 
   it 'translate facet by count ascending query', () ->
    facetTester 'countAsc'

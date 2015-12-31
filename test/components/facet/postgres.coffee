@@ -13,6 +13,12 @@ translations =
     FROM: testTable
     'ORDER BY': 'COUNT(category) DESC'
 
+  withLimit:
+    SELECT: 'category, COUNT(category)'
+    FROM: testTable
+    'ORDER BY': 'COUNT(category) DESC'
+    LIMIT: 100
+
   countAsc:
    SELECT: 'category, COUNT(category)'
    FROM: testTable
@@ -45,6 +51,9 @@ describe 'Postgres facet query tests', () ->
 
   it 'translate basic facet query', () ->
    facetTester 'basic'
+
+  it 'translate facet query with limit', () ->
+   facetTester 'withLimit'
 
   it 'translate facet by count ascending query', () ->
    facetTester 'countAsc'

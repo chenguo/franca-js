@@ -13,6 +13,12 @@ translations =
     'facet.sort': 'count'
     q: '*:*'
 
+  withLimit:
+    'facet.field': 'category'
+    'facet.sort': 'count'
+    'facet.limit': 100
+    q: '*:*'
+
   byValue:
     'facet.field': 'category'
     'facet.sort': 'index'
@@ -29,6 +35,9 @@ describe 'Solr facet query tests', () ->
 
   it 'translate basic facet query', () ->
    facetTester 'basic'
+
+  it 'translate facet query with limit', () ->
+   facetTester 'withLimit'
 
   it 'translate facet by count ascending query', () ->
    facetTester.bind(null,'countAsc').should.throw()

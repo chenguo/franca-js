@@ -22,11 +22,16 @@ class MongoFacet extends BaseFacet
     $sort[orderBy] = facetOpts.dir
     pipeline.push $sort: $sort
 
+  applyFacetLimit: (pipeline, queryComponents) ->
+    if queryComponents.options? and queryComponents.options.limit?
+      pipeline.push $limit: queryComponents.options.limit
+
   applyFacetImpl: (queryComponents, facetOpts) =>
     pipeline = []
     @applyFacetQuery pipeline, queryComponents
     @applyFacetField pipeline, facetOpts
     @applyFacetSort pipeline, facetOpts
+    @applyFacetLimit pipeline, queryComponents
     return pipeline
 
 

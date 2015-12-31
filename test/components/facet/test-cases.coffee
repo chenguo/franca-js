@@ -4,6 +4,12 @@ module.exports =
     facet:
       field: 'category'
 
+  withLimit:
+    facet:
+      field: 'category'
+    options:
+      limit: 100
+
   countAsc:
     facet:
       field: 'category'

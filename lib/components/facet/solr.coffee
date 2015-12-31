@@ -20,9 +20,15 @@ class SolrFacet extends BaseFacet
       @countSortError() if facetOpts.dir is 1
     queryComponents['facet.sort'] = sortBy
 
+  applyFacetLimit: (queryComponents) ->
+    if queryComponents.rows?
+      queryComponents['facet.limit'] = queryComponents.rows
+      delete queryComponents.rows
+
   applyFacetImpl: (queryComponents, facetOpts) =>
     @applyFacetField queryComponents, facetOpts
     @applyFacetSort queryComponents, facetOpts
+    @applyFacetLimit queryComponents
     return queryComponents
 
 module.exports = (new SolrFacet).applyFacet
