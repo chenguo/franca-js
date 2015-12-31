@@ -5,7 +5,8 @@ It is often useful to query a database for counts of values for a specific field
 ## Table of Contents
 * [Overview](#facet-overview)
 * [Basic Facets](#facet-basic)
-* [Facet Options](#facet-options)
+** [Basic Facet Options](#facet-basic-options)
+* [Range Facets](#facet-range)
 * [Facets with Queries](#facet-queries)
 
 
@@ -52,8 +53,8 @@ An example Franca query that would be converted into a facet query:
 This will generate a query (aggregation pipeline for Mongo) that will return distinct values for the field ```color``` with counts associated with each value.
 
 
-<a name="facet-options"/>
-## Sorting Facets
+<a name="facet-basic-options"/>
+### Sorting Facets
 
 The list of facets returned can be sorted. The default is to sort by facet count, in descending order.
 
@@ -96,6 +97,14 @@ For example, the following query will generate facets sorted by value, in ascend
   }
 }
 ```
+
+<a name="facet-range"/>
+## Range Facets
+
+Where regular facet lookup returns a list of values and counts, range facets return a max and min value for a given field.
+
+This is not yet supported, but planned.
+
 
 <a name="facet-query"/>
 ## Facets with Query Filters
