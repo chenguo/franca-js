@@ -1,12 +1,14 @@
-require('coffee-script')
-convert = require('./lib/convert')
+require('coffee-script');
+r = require('app-root-path').require;
+common = r('lib/common');
+translate = r('/lib/translate');
+
 
 module.exports = {
-  query: require('./lib/query'),
-  options: require('./lib/options'),
-  TYPES: require('./lib/query/common').TYPES,
-  convert: convert,
-  toMongo: convert.toMongo,
-  toPg: convert.toPg,
-  toSolr: convert.toSolr
-}
+  components: r('/lib/components'),
+  TYPES: common.TYPES,
+  translate: translate,
+  toMongo: translate.toMongo,
+  toPg: translate.toPg,
+  toSolr: translate.toSolr
+};

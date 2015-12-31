@@ -25,6 +25,12 @@ isDescVal = (v) ->
     else false
 
 module.exports =
+  TYPES:
+    Q: 'Q'
+    AND: 'AND'
+    OR: 'OR'
+    RAW: 'RAW'
+
   preprocess: (q) ->
     processed =
       query: canonicalizeQuery q
