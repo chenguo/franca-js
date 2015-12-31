@@ -23,7 +23,7 @@ module.exports =
   withQuery:
     facet:
       field: 'category'
-      sort: 'ascending'
+      sort: 'descending'
     query:
       field: 'difficulty'
       match: 'high'

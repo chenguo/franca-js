@@ -32,7 +32,7 @@ translations =
    SELECT: 'category, COUNT(category)'
    FROM: testTable
    WHERE: "difficulty = 'high'"
-   'ORDER BY': 'COUNT(category) ASC'
+   'ORDER BY': 'COUNT(category) DESC'
 
 
 facetTester = (key) ->
