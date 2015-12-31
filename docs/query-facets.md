@@ -3,13 +3,13 @@
 It is often useful to query a database for counts of values for a specific field. The immediate obvious application is to know counts after filtering for a particular value of a field.
 
 ## Table of Contents
-* [Overview](#facets-overview)
-* [Basic Facets](#facets-basic)
-* [Facet Options](#facets-options)
-* [Facets with Queries](#facets-queries)
+* [Overview](#facet-overview)
+* [Basic Facets](#facet-basic)
+* [Facet Options](#facet-options)
+* [Facets with Queries](#facet-queries)
 
 
-<a name="facets-overview"/>
+<a name="facet-overview"/>
 ## Overview
 
 Let's consider a database of fruit:
@@ -36,7 +36,7 @@ purple| 1
 
 Which tells the user if a filter of ```color == red``` is applied, they will get back two rows of data.
 
-<a name="facets-basic"/>
+<a name="facet-basic"/>
 ## Basic Facets
 
 An example Franca query that would be converted into a facet query:
@@ -52,7 +52,7 @@ An example Franca query that would be converted into a facet query:
 This will generate a query (aggregation pipeline for Mongo) that will return distinct values for the field ```color``` with counts associated with each value.
 
 
-<a name="facets-options"/>
+<a name="facet-options"/>
 ## Sorting Facets
 
 The list of facets returned can be sorted. The default is to sort by facet count, in descending order.
@@ -69,6 +69,8 @@ The list of facets returned can be sorted. The default is to sort by facet count
 ```
 
 It is also possible to sort by facet value and in ascending order via the ```facet.sort``` subkey. When specifying sorting by value, ascending is the default. The same values to specify sort direction for query options (1/-1, "asc"/"desc", "ascending"/"descending") can be used here.
+
+**note**: because of Solr limitations, only descending count and ascending value facet ordering is available
 
 facet.sort value | sorts by | order
 ---|---|---
@@ -95,7 +97,7 @@ For example, the following query will generate facets sorted by value, in ascend
 }
 ```
 
-<a name="facets-query"/>
+<a name="facet-query"/>
 ## Facets with Query Filters
 
 The facet operation is available in conjunction with a query. For example:
