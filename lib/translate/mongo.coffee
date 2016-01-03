@@ -1,4 +1,3 @@
-r = require('app-root-path').require
 components = require '../components'
 
 module.exports = (q) ->

@@ -1,9 +1,8 @@
 _ = require 'lodash'
 require 'should'
 
-r = require('app-root-path').require
-components = r 'lib/components'
-common = r 'test/common'
+components = require '../../../lib/components'
+common = require '../../common'
 testCases = require './test-cases'
 
 testTable = 'tab'

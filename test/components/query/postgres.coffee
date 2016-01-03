@@ -1,10 +1,9 @@
 require 'should'
 _ = require 'lodash'
-r = require('app-root-path').require
 testCases = require './test-cases'
-TYPES = r('lib/common').TYPES
-query = r 'lib/components/query'
-common = r 'test/common'
+TYPES = require('../../../lib/common').TYPES
+query = require '../../../lib/components/query'
+common = require '../../common'
 
 
 translations =

@@ -1,8 +1,7 @@
 require 'should'
 _ = require 'lodash'
 
-r = require('app-root-path').require
-franca = r 'index'
+franca = require '../index'
 common = require './common'
 
 
