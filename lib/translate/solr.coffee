@@ -7,6 +7,6 @@ combineComponents = (components, encode) ->
   return qStr
 
 module.exports = (q, encode=false) ->
-  components = components.toSolr q
-  translated = combineComponents components, encode
+  c = components.toSolr q
+  translated = combineComponents c, encode
   return translated

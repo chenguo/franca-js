@@ -15,6 +15,5 @@ combineComponents = (components) ->
   return pgQuery
 
 module.exports = (q) ->
-  components = components.toPg q
-  translated = combineComponents components
+  translated = combineComponents components.toPg q
   return translated

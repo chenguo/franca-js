@@ -1,8 +1,8 @@
 components = require '../components'
 
 module.exports = (q) ->
-  components = components.toMongo q
+  c = components.toMongo q
   translated =
-    query: components.query
-    options: components.options
+    query: c.query
+    options: c.options
   return translated

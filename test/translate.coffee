@@ -32,10 +32,24 @@ describe 'General integration tests', () ->
   it 'translate to Mongo query', () ->
     common.testTranslation franca.toMongo, translations.mongo, sampleQuery
 
+  it 'translate multiple Mongo queries', () ->
+    common.testTranslation franca.toMongo, translations.mongo, sampleQuery
+    common.testTranslation franca.toMongo, translations.mongo, sampleQuery
+
   it 'translate to Postgres query', () ->
     pgQuery = _.cloneDeep sampleQuery
     pgQuery.table = testTable
     common.testTranslation franca.toPg, translations.pg, pgQuery
 
+  it 'translate multiple Postgres queries', () ->
+    pgQuery = _.cloneDeep sampleQuery
+    pgQuery.table = testTable
+    common.testTranslation franca.toPg, translations.pg, pgQuery
+    common.testTranslation franca.toPg, translations.pg, pgQuery
+
   it 'translate to Solr query', () ->
+    common.testTranslation franca.toSolr, translations.solr, sampleQuery
+
+  it 'translate multiple Solr queries', () ->
+    common.testTranslation franca.toSolr, translations.solr, sampleQuery
     common.testTranslation franca.toSolr, translations.solr, sampleQuery
