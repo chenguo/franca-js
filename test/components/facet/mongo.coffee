@@ -6,38 +6,42 @@ common = require '../../common'
 testCases = require './test-cases'
 
 translations =
-  basic: [
-    $group:
-      _id: '$category'
-      count: $sum: 1
-  , $sort: count: -1
-  ]
+  basic:
+    pipeline: [
+      $group:
+        _id: '$category'
+        count: $sum: 1
+    , $sort: count: -1
+    ]
 
-  countAsc: [
-    $group:
-      _id: '$category'
-      count: $sum: 1
-  , $sort: count: 1
-  ]
+  countAsc:
+    pipeline: [
+      $group:
+        _id: '$category'
+        count: $sum: 1
+    , $sort: count: 1
+    ]
 
-  byValue: [
-    $group:
-      _id: '$category'
-      count: $sum: 1
-  , $sort: _id: 1
-  ]
+  byValue:
+    pipeline: [
+      $group:
+        _id: '$category'
+        count: $sum: 1
+    , $sort: _id: 1
+    ]
 
-  valueDesc: [
-    $group:
-      _id: '$category'
-      count: $sum: 1
-  , $sort: _id: -1
-  ]
+  valueDesc:
+    pipeline: [
+      $group:
+        _id: '$category'
+        count: $sum: 1
+    , $sort: _id: -1
+    ]
 
 translations.withLimit =
-  translations.basic.concat [$limit: 100]
+  pipeline: translations.basic.pipeline.concat [$limit: 100]
 translations.withQuery =
-  [$match: difficulty: 'high'].concat translations.basic
+  pipeline: [$match: difficulty: 'high'].concat translations.basic.pipeline
 
 
 facetTester = common.makeTester testCases, components.toMongo, translations

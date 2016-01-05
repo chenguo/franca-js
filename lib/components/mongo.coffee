@@ -9,5 +9,6 @@ module.exports = (q) ->
     query: query.toMongo q.query
     options: options.toMongo q.options
   if q.facet?
-    components = facet.toMongo components, q.facet
+    components =
+      pipeline: facet.toMongo components, q.facet
   return components
