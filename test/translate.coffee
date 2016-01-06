@@ -5,19 +5,21 @@ franca = require '../index'
 common = require './common'
 
 
+testTable = 'tab'
+
 sampleQuery =
   options:
     offset: 50
     limit: 10
+    table: testTable
   query:
     type: franca.TYPES.Q
     field: 'price'
     range: lte: 100
 
-testTable = 'tab'
-
 translations =
   mongo:
+    collection: testTable
     query:
       price: $lte: 100
     options:
