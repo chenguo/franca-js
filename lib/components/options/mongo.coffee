@@ -21,6 +21,10 @@ class MongoOptions extends BaseOptions
     else
       return {}
 
+  tableOptions: (opts) ->
+    if opts.table?
+      return collection: opts.table
+
   fieldOptions: (opts) ->
     if opts.fields? and opts.fields instanceof Array
       fieldOpts = _.reduce opts.fields, (fields, f) ->
@@ -31,4 +35,3 @@ class MongoOptions extends BaseOptions
 
 
 module.exports = (new MongoOptions).convertOptions
-

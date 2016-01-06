@@ -49,3 +49,9 @@ describe 'Mongo options tests', () ->
 
   it 'should translate combined options', () ->
     testOptions 'combined'
+
+  it 'should translate a collection specification', () ->
+    colQuery =
+      table: 'myCollection'
+    expected = collection: 'myCollection'
+    common.testTranslation options.toMongo, expected, colQuery
