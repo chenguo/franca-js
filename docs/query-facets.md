@@ -5,7 +5,7 @@ It is often useful to query a database for counts of values for a specific field
 ## Table of Contents
 * [Overview](#facet-overview)
 * [Basic Facets](#facet-basic)
-** [Basic Facet Options](#facet-basic-options)
+  * [Basic Facet Options](#facet-basic-options)
 * [Range Facets](#facet-range)
 * [Facets with Queries](#facet-queries)
 
