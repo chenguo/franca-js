@@ -1,9 +1,9 @@
-r = require('app-root-path').require
-components = r 'lib/components'
+_ = require 'lodash'
+components = require '../components'
+
+KEYS = ['query', 'options', 'pipeline', 'collection']
 
 module.exports = (q) ->
-  components = components.toMongo q
-  translated =
-    query: components.query
-    options: components.options
+  c = components.toMongo q
+  translated = _.pick c, KEYS
   return translated

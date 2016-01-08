@@ -1,7 +1,6 @@
 require 'should'
-r = require('app-root-path').require
-BaseFacet = r 'lib/components/facet/base'
-common = r 'test/common'
+BaseFacet = require '../../../lib/components/facet/base'
+common = require '../../common'
 testCases = require './test-cases'
 
 canonicalOpts =

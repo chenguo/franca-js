@@ -8,6 +8,7 @@ class PostgresFacet extends BaseFacet
   applyFacetField: (queryComponents, facetOpts) ->
     selectFields = facetOpts.field + ', ' + facetOpts.countField
     queryComponents.SELECT = selectFields
+    queryComponents['GROUP BY'] = facetOpts.field
 
   applyFacetSort: (queryComponents, facetOpts) =>
     if facetOpts.sortBy is @VALUE

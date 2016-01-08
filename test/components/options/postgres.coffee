@@ -2,9 +2,8 @@ require 'should'
 _ = require 'lodash'
 testCases = require './test-cases'
 
-r = require('app-root-path').require
-options = r 'lib/components/options'
-common = r 'test/common'
+options = require '../../../lib/components/options'
+common = require '../../common'
 
 testTable = 'pgTable'
 translations =

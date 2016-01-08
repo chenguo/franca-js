@@ -1,6 +1,6 @@
 {
   "name": "franca-js",
-  "version": "0.4.0",
+  "version": "0.4.9",
   "author": "chen.guo.0625@gmail.com",
   "description": "Common query abstraction for multiple data backends",
   "repository": {
@@ -8,7 +8,6 @@
     "url": "https://github.com/chenguo/franca-js"
   },
   "devDependencies": {
-    "app-root-path": "1.2.0",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-mocha-test": "0.12.7",

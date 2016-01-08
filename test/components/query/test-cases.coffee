@@ -1,5 +1,4 @@
-r = require('app-root-path').require
-common = r 'lib/common'
+common = require '../../../lib/common'
 
 TYPES = common.TYPES
 

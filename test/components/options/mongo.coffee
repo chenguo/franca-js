@@ -2,9 +2,8 @@ require 'should'
 _ = require 'lodash'
 testCases = require './test-cases'
 
-r = require('app-root-path').require
-options = r 'lib/components/options'
-common = r 'test/common'
+options = require '../../../lib/components/options'
+common = require '../../common'
 
 
 translations =
@@ -50,3 +49,9 @@ describe 'Mongo options tests', () ->
 
   it 'should translate combined options', () ->
     testOptions 'combined'
+
+  it 'should translate a collection specification', () ->
+    colQuery =
+      table: 'myCollection'
+    expected = collection: 'myCollection'
+    common.testTranslation options.toMongo, expected, colQuery

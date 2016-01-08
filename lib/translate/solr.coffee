@@ -1,13 +1,12 @@
 _ = require 'lodash'
 Qs = require 'qs'
-r = require('app-root-path').require
-components = r 'lib/components'
+components = require '../components'
 
 combineComponents = (components, encode) ->
   qStr = Qs.stringify components, encode: encode
   return qStr
 
 module.exports = (q, encode=false) ->
-  components = components.toSolr q
-  translated = combineComponents components, encode
+  c = components.toSolr q
+  translated = combineComponents c, encode
   return translated

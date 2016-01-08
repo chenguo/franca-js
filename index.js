@@ -1,11 +1,10 @@
 require('coffee-script');
-r = require('app-root-path').require;
-common = r('lib/common');
-translate = r('/lib/translate');
+common = require('./lib/common');
+translate = require('./lib/translate');
 
 
 module.exports = {
-  components: r('/lib/components'),
+  components: require('./lib/components'),
   TYPES: common.TYPES,
   translate: translate,
   toMongo: translate.toMongo,

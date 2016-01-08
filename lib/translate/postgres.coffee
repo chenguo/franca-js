@@ -1,5 +1,4 @@
-r = require('app-root-path').require
-components = r 'lib/components'
+components = require '../components'
 
 CLAUSES = ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'ORDER BY',
            'LIMIT', 'OFFSET']
@@ -16,6 +15,5 @@ combineComponents = (components) ->
   return pgQuery
 
 module.exports = (q) ->
-  components = components.toPg q
-  translated = combineComponents components
+  translated = combineComponents components.toPg q
   return translated

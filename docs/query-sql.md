@@ -10,29 +10,9 @@ Translation to SQL based data backends support an extended set of configurations
 <a name="table"/>
 ## Table
 
-Node SQL drivers typically require the entire SQL string as input, which includes the table name. Thus when translating a Franca query object to a SQL based query, the user must specify the table, either in a top-level ```table``` key or nested within ```options``` as ```options.table```.
+When translating to SQL, queries MUST include a table. This is because SQL based queries incorporate the target table into the query itself. On the other hand, this is optional for other databases like Mongo because in Mongo Node drivers typically getting a collection handle and making the query to the collection happens in separate steps.
 
-Examples:
-```json
-{
-  "table": "sandwiches",
-  "options": {
-    "fields": ["bread", "cheese"]
-  }
-}
-```
-
-```json
-{
-  "options": {
-    "table": "sandwiches"
-    "fields": ["bread", "cheese"]
-  }
-}
-```
-
-Both of the above would translate into ```SELECT bread, cheese FROM sandwiches```
-
+Please see the [main query documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-object.md#options-table) for more details.
 
 
 <a name="join"/>

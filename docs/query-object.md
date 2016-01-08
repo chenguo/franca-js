@@ -17,6 +17,7 @@ The Franca query object is a common representation for basic data filters and an
 * [Negating Queries](#query-negation)
 * [Query Options](#options)
   * [fields](#options-fields)
+  * [table](#options-table)
   * [offset](#options-offset)
   * [limit](#options-limit)
   * [sort](#options-sort)
@@ -285,6 +286,36 @@ Specify the fields (columns)  to return in the query.
 ```
 
 The above query only returns the ```size```, ```price```, and ```brand``` columns for rows where the ```category``` field has the value "soda".
+
+
+<a name="options-table"/>
+#### Table
+
+Specify a table to query; for example in SQL this would be a table, and in Mongo this would be a collection.
+
+This is required for SQL because the table name is required as a part of the query itself, in the FROM clause. For other databases this is optional.
+
+```json
+{
+  "options": {
+    "table": "sandwiches"
+    "fields": ["bread", "cheese"]
+  }
+}
+```
+
+The ```table``` key can also be specified as a top level key. The following is equivalent to the above:
+
+```json
+{
+  "table": "sandwiches",
+  "options": {
+    "fields": ["bread", "cheese"]
+  }
+}
+```
+
+The above query would generate a query that selects the fields "bread" and "cheese" from a table called "sandwiches". In SQL this would be ```SELECT bread, cheese FROM sandwiches```.
 
 
 <a name="options-offset"/>
