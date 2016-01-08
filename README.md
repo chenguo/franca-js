@@ -40,6 +40,10 @@ Franca queries are intended to be a common query format for the basic queries co
 Of course, all data resources have their own quirks and special features, and no common query format can hope to capture all of these for each individual database. Franca queries support a raw mode that allow the user to pass a native query to the backend, exposing the full features of the underlying data resource.
 
 
+## API
+
+Top level Franca API documentation is located [here](https://github.com/chenguo/franca-js/blob/master/docs/api.md).
+
 ## Common Query Format
 
 The common query format is a JSON object that incorporates basics data query logic. See full documentation [here](https://github.com/chenguo/franca-js/blob/master/docs/query-object.md).
