@@ -9,5 +9,6 @@ module.exports = {
   translate: translate,
   toMongo: translate.toMongo,
   toPg: translate.toPg,
-  toSolr: translate.toSolr
+  toSolr: translate.toSolr,
+  query: require('./lib/query')
 };

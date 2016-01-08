@@ -15,6 +15,8 @@ module.exports = (grunt) ->
 
       query: src: ['test/components/query/*.coffee']
 
+      queryEval: src: ['test/query/*.coffee']
+
       mongo: src: ['**/mongo.coffee']
 
       postgres: src: ['**/postgres.coffee']
@@ -22,9 +24,10 @@ module.exports = (grunt) ->
       solr: src: ['**/solr.coffee']
 
 
+
   grunt.registerTask 'default',
     ['mochaTest:common', 'mochaTest:translate', 'mochaTest:facet',
-     'mochaTest:testOptions', 'mochaTest:query']
+     'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:queryEval']
 
   grunt.registerTask 'mongo', 'mochaTest:mongo'
 
