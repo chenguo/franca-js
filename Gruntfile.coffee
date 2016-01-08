@@ -7,7 +7,7 @@ module.exports = (grunt) ->
 
       common: src: ['test/common/*.coffee']
 
-      translate: src: ['test/translate.coffee']
+      translate: src: ['test/translate/*.coffee']
 
       facet: src: ['test/components/facet/*.coffee']
 
