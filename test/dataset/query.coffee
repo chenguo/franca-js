@@ -1,13 +1,13 @@
 require 'should'
 TYPES = require('../../lib/common').TYPES
-queryData = require('../../lib/query').queryData
+evalQuery = require('../../lib/dataset').query
 data = require './data'
 
 describe 'Test in-memory query evaluation', () ->
 
   it 'evaluate empty query', () ->
     query = {}
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.should.eql data.rows
 
   it 'evaluate basic query', () ->
@@ -15,7 +15,7 @@ describe 'Test in-memory query evaluation', () ->
       query:
         field: 'name'
         match: 'Foo'
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.should.containEql data.foo1
     result.should.containEql data.foo2
     result.should.containEql data.foo3
@@ -34,7 +34,7 @@ describe 'Test in-memory query evaluation', () ->
           field: 'name'
           match: 'Bar'
         ]
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.should.containEql data.foo1
     result.should.containEql data.foo3
     result.should.containEql data.bar1
@@ -44,19 +44,19 @@ describe 'Test in-memory query evaluation', () ->
 
   it 'apply offset option', () ->
     query = options: offset: 5
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.length.should.equal data.rows.length - query.options.offset
     result[0].should.equal data.rows[5]
     result[3].should.equal data.rows[8]
 
   it 'apply out-of-bounds offset option', () ->
     query = options: offset: 10
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.length.should.equal 0
 
   it 'apply limit option', () ->
     query = options: limit: 5
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.length.should.equal query.options.limit
     result[0].should.equal data.rows[0]
     result[3].should.equal data.rows[3]
@@ -64,7 +64,7 @@ describe 'Test in-memory query evaluation', () ->
 
   it 'apply out-of-bounds limit option', () ->
     query = options: limit: 100
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.should.eql data.rows
 
   it 'apply offset and limit options', () ->
@@ -72,7 +72,7 @@ describe 'Test in-memory query evaluation', () ->
       options:
         limit: 3
         offset: 5
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.length.should.equal query.options.limit
     result[0].should.equal data.rows[5]
     result[1].should.equal data.rows[6]
@@ -83,6 +83,6 @@ describe 'Test in-memory query evaluation', () ->
       options:
         offset: 8
         limit: 5
-    result = queryData data.rows, query
+    result = evalQuery data.rows, query
     result.length.should.equal data.rows.length - query.options.offset
     result[0].should.equal data.rows[8]

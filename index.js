@@ -10,5 +10,5 @@ module.exports = {
   toMongo: translate.toMongo,
   toPg: translate.toPg,
   toSolr: translate.toSolr,
-  query: require('./lib/query')
+  dataset: require('./lib/dataset')
 };

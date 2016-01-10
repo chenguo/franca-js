@@ -15,7 +15,7 @@ module.exports = (grunt) ->
 
       query: src: ['test/components/query/*.coffee']
 
-      queryEval: src: ['test/query/*.coffee']
+      dataset: src: ['test/dataset/*.coffee']
 
       mongo: src: ['**/mongo.coffee']
 
@@ -27,7 +27,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default',
     ['mochaTest:common', 'mochaTest:translate', 'mochaTest:facet',
-     'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:queryEval']
+     'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:dataset']
 
   grunt.registerTask 'mongo', 'mochaTest:mongo'
 

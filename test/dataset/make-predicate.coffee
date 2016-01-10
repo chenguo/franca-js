@@ -1,6 +1,6 @@
 require 'should'
 TYPES = require('../../lib/common').TYPES
-makePredicate = require '../../lib/query/make-predicate'
+makePredicate = require '../../lib/dataset/make-predicate'
 data = require './data'
 
 describe 'Query predicate tests', () ->

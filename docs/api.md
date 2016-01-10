@@ -5,7 +5,7 @@ This document describes the top level Franca API available by requiring 'franca-
 ## Table of Contents
 * [TYPES](#franca-types)
 * [translate](#franca-translate)
-* [query](#franca-query)
+* [dataset](#franca-dataset)
 
 
 <a name="franca-types"/>
@@ -31,25 +31,25 @@ TYPES holds the following types, whose values are the same as the type.
 
 Ecah of the above ```to*``` functions are also available at the top level. I.e. ```franca.translate.toSolr``` is also available as ```franca.toSolr```.
 
-<a name="franca-query"/>
-## query
+<a name="franca-dataset"/>
+## dataset
 
-```franca.query``` is an in-memory Franca query evaluator. Two functions are available.
+```franca.dataset``` provide functions that operate on in-memory data. Essentially, this is Franca itself acting as a database.
 
-NOTE: franca.query implementation is currently in development, and is planned to be complete with version 0.5.0
+NOTE: franca.dataset implementation is currently in development, and is planned to be complete with version 0.5.0
 
-### query.makePredicate(query)
+### dataset.makePredicate(query)
 
 Returns a predicate function, which takes a row of data and returns if the row matches the given query.
 
 ```coffee-script
-fq = require('franca-js').query
+ds = require('franca-js').dataset
 
 query =
   query:
     field: 'country'
     match: 'South Africa'
-predicate = fq.makePredicate query
+predicate = ds.makePredicate query
 
 # this will return false
 isMatch = predicate country: 'Italy'
@@ -58,6 +58,6 @@ isMatch = predicate country: 'Italy'
 isMatch = predicate country: 'South Africa'
 ```
 
-### query.queryData(rows, query)
+### dataset.queryData(rows, query)
 
 Given rows of data and a Franca query, apply the query to rows of data and return the selected rows while respecting options like ```options.limit``` and ```options.offset```.
