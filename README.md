@@ -18,7 +18,8 @@ solrClient = require 'configured-solr-client' # initialized solr-node-client
 
 # This can be generated on the UI or passed in from another module
 queryObj =
-  limit: 20
+  options:
+    limit: 20
   query:
     field: 'age'
     match: gt: 21
