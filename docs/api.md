@@ -58,6 +58,6 @@ isMatch = predicate country: 'Italy'
 isMatch = predicate country: 'South Africa'
 ```
 
-### dataset.queryData(rows, query)
+### dataset.query(rows, query)
 
 Given rows of data and a Franca query, apply the query to rows of data and return the selected rows while respecting options like ```options.limit``` and ```options.offset```.
