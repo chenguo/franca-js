@@ -17,7 +17,6 @@ module.exports =
   makePredicate: makePredicate
 
   queryData: (data, query) ->
-
     query = common.preprocess query
     filterFn = makePredicate query.query
     filteredData = data.filter filterFn

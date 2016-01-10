@@ -35,4 +35,5 @@ evaluateBasicQuery = (row, query) ->
 
 module.exports = (query) ->
   return (row) ->
+    query = query.query if query.query?
     return evaluateQuery row, query
