@@ -1,5 +1,6 @@
 common = require '../common'
 makePredicate = require './make-predicate'
+facets = require './facets'
 
 # Evaluator for Franca queries on in memory data
 
@@ -11,6 +12,9 @@ applyOptions = (rows, options) ->
     rows = rows.slice offset
   return rows
 
+filterData = (rows, query) ->
+  filterFn = makePredicate query.query
+  return rows.filter filterFn
 
 module.exports =
 
@@ -18,7 +22,13 @@ module.exports =
 
   query: (data, query) ->
     query = common.preprocess query
-    filterFn = makePredicate query.query
-    filteredData = data.filter filterFn
+    filteredData = filterData data, query
     rows = applyOptions filteredData, query.options
     return rows
+
+  facets: (data, query) ->
+    query = common.preprocess query
+    filteredData = filterData data, query
+    console.log filteredData
+    dataFacets = facets.generateFacets filteredData, query.facet
+    return dataFacets

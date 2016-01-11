@@ -60,4 +60,8 @@ isMatch = predicate country: 'South Africa'
 
 ### dataset.query(rows, query)
 
-Given rows of data and a Franca query, apply the query to rows of data and return the selected rows while respecting options like ```options.limit``` and ```options.offset```.
+Given rows of data and a Franca query, apply the query to rows of data and return the selected rows while respecting options like ```options.limit``` and ```options.offset```. Please see the [query documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-object.md) for more details.
+
+### dataset.facets(rows, facetQuery)
+
+Given rows of data and a Franca facet query, return the available facets. See the [facets documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-facets.md) for more details.
