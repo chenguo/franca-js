@@ -29,6 +29,5 @@ module.exports =
   facets: (data, query) ->
     query = common.preprocess query
     filteredData = filterData data, query
-    console.log filteredData
     dataFacets = facets.generateFacets filteredData, query.facet
     return dataFacets

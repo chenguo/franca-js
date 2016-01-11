@@ -25,7 +25,6 @@ sortFacetValues = (facets, sortOpts) ->
     valFn = (facet) -> facet.value
   else
     valFn = (facet) -> facet.count
-  console.log facets.map (f) -> f.value
   facets = facets.sort (a, b) ->
     valA = valFn a
     valB = valFn b
@@ -34,13 +33,11 @@ sortFacetValues = (facets, sortOpts) ->
       when valB < valA then 1
       else 0
     return cmpVal * sortOpts.dir
-  console.log facets.map (f) -> f.value
   return facets
 
 module.exports =
   generateFacets: (data, facetOpts={}) ->
     facetValues = getFacetValues data, facetOpts.field
-    console.log facetValues
     sortOpts = facetCommon.formatSortOpts facetOpts.sort
     facets = sortFacetValues facetValues, sortOpts
     return facets
