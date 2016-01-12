@@ -36,7 +36,6 @@ Ecah of the above ```to*``` functions are also available at the top level. I.e. 
 
 ```franca.dataset``` provide functions that operate on in-memory data. Essentially, this is Franca itself acting as a database.
 
-NOTE: franca.dataset implementation is currently in development, and is planned to be complete with version 0.5.0
 
 ### dataset.makePredicate(query)
 
