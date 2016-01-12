@@ -1,12 +1,12 @@
-foo1 = name: 'Foo', distance: 1
+foo1 = name: 'Foo', distance: 1, rating: 50
 foo2 = name: 'Foo', distance: 2
 foo3 = name: 'Foo', distance: 3
 bar1 = name: 'Bar', distance: 1
-bar2 = name: 'Bar', distance: 2
+bar2 = name: 'Bar', distance: 2, rating: 25
 bar3 = name: 'Bar', distance: 3
 baz1 = name: 'Baz', distance: 1
-baz2 = name: 'Baz', distance: 2
-baz3 = name: 'Baz', distance: 3
+baz2 = name: 'Baz', distance: 2, rating: 60
+baz3 = name: 'Baz', distance: 3, rating: 70
 
 
 module.exports =
