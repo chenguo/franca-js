@@ -1,5 +1,6 @@
 _ = require 'lodash'
 common = require '../../common'
+optsCommon = require './common'
 
 class BaseOptions
 
@@ -14,21 +15,8 @@ class BaseOptions
   # Only used for SQL based translations
   tableOptions: () -> {}
 
-  formatSortOpts: (opts) ->
-    if opts.sort?
-      if opts.sort instanceof Array
-        orderings = opts.sort.map (s) =>
-          [s[0], @formatSortValue s[1]]
-      else if opts.sort instanceof Object
-        orderings = _.map opts.sort, (v, k) =>
-          [k, @formatSortValue v]
-      else
-        unless typeof opts.sort is 'string'
-          msg = JSON.stringify opts.sort
-        else
-          msg = opts.sort
-        throw new Error 'Invalid sort option format: ' + msg
-      return orderings
+  formatSortOpts: (opts) =>
+    return optsCommon.getSorts opts, @formatSortValue
 
   canonicalizeOptions: (opts) ->
     if opts.fields?

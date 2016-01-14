@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-getSorts = (opts, formatter) ->
+getSorts = (opts = {}, formatter) ->
   if opts.sort?
     if opts.sort instanceof Array
       orderings = opts.sort.map (s) ->
