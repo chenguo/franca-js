@@ -1,3 +1,12 @@
+ensureNumericValue = (obj, field) ->
+  if obj[field]?
+    val = parseInt obj[field]
+    if isNaN val
+      delete obj[field]
+    else
+      obj[field] = val
+  return obj
+
 canonicalizeOpts = (q) ->
   opts = q.options or {}
   # Ensure table is under options if it exists
@@ -5,6 +14,9 @@ canonicalizeOpts = (q) ->
   if opts.columns?
     opts.fields = opts.columns
     delete opts.columns
+  # Ensure offset and limit are numbers
+  opts = ensureNumericValue opts, 'limit'
+  opts = ensureNumericValue opts, 'offset'
   return opts
 
 canonicalizeQuery = (q) ->
