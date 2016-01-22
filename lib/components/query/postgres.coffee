@@ -27,6 +27,7 @@ class PostgresQuery extends BaseQuery
 
   formatVal: (val) ->
     if typeof val is 'string'
+      val = val.replace "'", "''"
       return "'#{val}'"
     else
       return val
@@ -38,7 +39,7 @@ class PostgresQuery extends BaseQuery
       op = '!='
     else
       op = '='
-    val = "'#{q.match}'"
+    val = @formatVal q.match
     qstr = @cond q.field, op, val
     return qstr
 

@@ -59,6 +59,13 @@ describe 'Postgres query tests', () ->
   it 'should translate a simple query', () ->
     testQuery 'basic'
 
+  it 'should translate a query with single quote', () ->
+    q =
+      field: 'name'
+      match: "Bobby's Coffee"
+    expected  = "name = 'Bobby''s Coffee'"
+    common.testTranslation query.toPg, expected, q
+
   it 'should translate a negated query', () ->
     testNegatedQuery 'basic'
 
