@@ -22,6 +22,11 @@ nullQuery =
   field: 'name'
   null: true
 
+nonNull =
+  type: TYPES.Q
+  field: 'name'
+  null: false
+
 range =
   type: TYPES.Q
   field: 'age'
@@ -96,6 +101,7 @@ module.exports =
   typeless: typeless
   multimatch: multimatch
   null: nullQuery
+  nonNull: nonNull
 
   range: range
   rangeEx: rangeExclusive

@@ -40,7 +40,7 @@ evaluateBasicQuery = (row, query) ->
       if query.match?
         match = evaluateMatchQuery row, query
       else if query.null?
-        match =evaluateNullQuery row, query
+        match = evaluateNullQuery row, query
       else if query.regexp?
         match = evaluateRegexpQuery row, query
       match = checkNegate match, query
@@ -57,7 +57,8 @@ evaluateMatchQuery = (row, query) ->
     return value is query.match
 
 evaluateNullQuery = (row, query) ->
-  return not row[query.field]?
+  isNull = not row[query.field]?
+  return if query.null then isNull else not isNull
 
 evaluateRangeQuery = (row, query) ->
   range = query.range or {}

@@ -26,7 +26,7 @@ class SolrQuery extends BaseQuery
 
   buildNullMatch: (q) =>
     qstr = q.field + ':[* TO *]'
-    unless q.negate
+    if @matchNull q
       qstr = @negateQuery qstr
     return qstr
 

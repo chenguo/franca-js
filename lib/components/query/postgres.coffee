@@ -52,7 +52,7 @@ class PostgresQuery extends BaseQuery
     return qstr
 
   buildNullMatchImpl: (q) ->
-    op = if q.negate then NOT_IS else IS
+    op = if @matchNull q then IS else NOT_IS
     qstr = @cond q.field, op, NULL
     return qstr
 

@@ -16,16 +16,16 @@ class MongoQuery extends BaseQuery
   buildNullMatchImpl: (q) ->
     field = q.field
     cond = [ {}, {} ]
-    if q.negate
-      # Exists and not null
-      cond[0][field] = $ne: null
-      cond[1][field] = $exists: true
-      return $and: cond
-    else
+    if @matchNull q
       # Doesn't exist or null
       cond[0][field] = null
       cond[1][field] = $exists: false
       return $or: cond
+    else
+      # Exists and not null
+      cond[0][field] = $ne: null
+      cond[1][field] = $exists: true
+      return $and: cond
 
   # Negate a Mongo range query
   negateRangeQuery: (rq) ->

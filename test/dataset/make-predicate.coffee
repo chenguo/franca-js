@@ -19,6 +19,10 @@ queries =
     field: 'rating'
     null: true
 
+  nonNull:
+    field: 'rating'
+    null: false
+
   range:
     field: 'rating'
     range:
@@ -73,6 +77,10 @@ expected =
   null:
     match: ['foo2', 'bar1', 'baz1']
     nonMatch: ['foo1', 'bar2', 'baz2', 'baz3']
+
+  nonNull:
+    match: ['foo1', 'bar2', 'baz2', 'baz3']
+    nonMatch: ['foo2', 'foo3', 'bar3', 'baz1']
 
   range:
     match: ['foo1', 'baz2', 'baz3']
@@ -143,6 +151,12 @@ describe 'Query predicate tests', () ->
 
   it 'evaluate a negated null query', () ->
     testNegateEval 'null'
+
+  it 'evaluate a non-null query', () ->
+    testEval 'nonNull'
+
+  it 'evaluate a negated non-null query', () ->
+    testNegateEval 'nonNull'
 
   it 'evaluate a range query', () ->
     testEval 'range'

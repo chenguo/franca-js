@@ -66,6 +66,10 @@ negatedTrans.compound =
 negatedTrans.nestedCompound =
   $and: [negatedTrans.basic, negatedTrans.compound]
 
+# Negated null queries
+translations.nonNull = negatedTrans.null
+negatedTrans.nonNull = translations.null
+
 
 testQuery = common.makeTester testCases, query.toMongo, translations
 testNegatedQuery = common.makeNegateQueryTester testCases, query.toMongo, negatedTrans
@@ -99,6 +103,12 @@ describe 'Mongo query tests', () ->
 
   it 'should translate a negated null query', () ->
     testNegatedQuery 'null'
+
+  it 'should translate a non-null query', () ->
+    testQuery 'nonNull'
+
+  it 'should translate a negated non-null query', () ->
+    testQuery 'nonNull'
 
   it 'should translate a range query', () ->
     testQuery 'range'

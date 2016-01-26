@@ -28,7 +28,6 @@ translations.compound =
 translations.nestedCompound =
   '(' + translations.basic + ' OR ' +  translations.compound + ')'
 
-#translations.compound =
 
 negatedTrans =
   basic: "name != 'Bill'"
@@ -43,6 +42,11 @@ negatedTrans.compound =
   '(' + negatedTrans.singleBoundRange + ' OR ' + negatedTrans.typeless + ')'
 negatedTrans.nestedCompound =
   '(' + negatedTrans.basic + ' AND ' + negatedTrans.compound + ')'
+
+# Negated null queries
+translations.nonNull = negatedTrans.null
+negatedTrans.nonNull = translations.null
+
 
 testQuery = common.makeTester testCases, query.toPg, translations
 testNegatedQuery = common.makeNegateQueryTester testCases, query.toPg, negatedTrans
@@ -83,6 +87,12 @@ describe 'Postgres query tests', () ->
 
   it 'should translate a negated null query', () ->
     testNegatedQuery 'null'
+
+  it 'should translate a non-null query', () ->
+    testQuery 'nonNull'
+
+  it 'should translate a negated non-null query', () ->
+    testQuery 'nonNull'
 
   it 'should translate a range query', () ->
     testQuery 'range'

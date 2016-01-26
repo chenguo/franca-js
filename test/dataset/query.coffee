@@ -24,7 +24,7 @@ describe 'Test in-memory query evaluation', () ->
     result.should.not.containEql data.baz2
     result.should.not.containEql data.baz3
 
-  it 'evalute a compound query', () ->
+  it 'evaluate a compound query', () ->
     query =
       query:
         type: TYPES.OR

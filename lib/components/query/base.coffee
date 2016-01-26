@@ -71,6 +71,10 @@ class BaseQuery
   # Match a null / empty value
   buildNullMatch: (q) -> @buildNullMatchImpl q
 
+  matchNull: (q) ->
+    # XOR. Use not to ensure boolean
+    return not q.null isnt not q.negate
+
   # Query within a range
   buildRangeMatch: (q) ->
     if (q.range not instanceof Object) or not
