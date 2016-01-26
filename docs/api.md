@@ -31,6 +31,49 @@ TYPES holds the following types, whose values are the same as the type.
 
 Ecah of the above ```to*``` functions are also available at the top level. I.e. ```franca.translate.toSolr``` is also available as ```franca.toSolr```.
 
+### Translate Example
+
+Example code:
+
+```coffee-script
+franca = require 'franca-js'
+
+query =
+  table: 'measurements'
+  query:
+    field: 'units'
+    match: ['oz', 'mg', 'kg']
+  options:
+    limit: 3
+
+mongoQuery = franca.toMongo query
+console.log 'Mongo translation:'
+console.log mongoQuery
+
+postgresQuery = franca.toPg query
+console.log '\nPostgres translation:'
+console.log postgresQuery
+
+solrQuery = franca.toSolr query
+console.log '\nSolr translation:'
+console.log solrQuery
+```
+
+The above would print:
+```
+Mongo translation:
+{ query: { units: { '$in': [Object] } },
+  options: { limit: 3 },
+  collection: 'measurements' }
+
+Postgres translation:
+SELECT * FROM measurements WHERE units IN ('oz', 'mg', 'kg') LIMIT 3
+
+Solr translation:
+q=units:("oz" OR "mg" OR "kg")&rows=3
+```
+
+
 <a name="franca-dataset"/>
 ## dataset
 
