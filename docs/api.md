@@ -3,10 +3,18 @@
 This document describes the top level Franca API available by requiring 'franca-js'.
 
 ## Table of Contents
+* [query object](#franca-query)
 * [TYPES](#franca-types)
 * [translate](#franca-translate)
 * [dataset](#franca-dataset)
 
+
+<a name="franca-query"/>
+## Query Objects
+
+Franca-JS revolves around the Franca query object, which strives to be a common query format that can be translated into equivalent queries for a number of data backends.
+
+The query object is fully documented [here](https://github.com/chenguo/franca-js/blob/master/docs/query-object.md).
 
 <a name="franca-types"/>
 ## TYPES
