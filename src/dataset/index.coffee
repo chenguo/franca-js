@@ -51,7 +51,6 @@ module.exports =
   makePredicate: makePredicate
 
   query: (data, query) ->
-    data = _.cloneDeep data
     query = common.preprocess query
     filteredData = filterData data, query
     rows = applyOptions filteredData, query.options
