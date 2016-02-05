@@ -57,7 +57,8 @@ module.exports =
   query: (data, query) ->
     query = common.preprocess query
     filteredData = filterData data, query
-    rows = applyOptions filteredData, query.options
+    opts = optsCommon.canonicalizeOptions query.options
+    rows = applyOptions filteredData, opts
     return rows
 
   facets: (data, query) ->
