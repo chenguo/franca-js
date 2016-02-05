@@ -19,6 +19,18 @@ getSorts = (opts = {}, formatter) ->
 module.exports =
   getSorts: getSorts
 
+  canonicalizeOptions: (opts) ->
+    if opts.fields?
+      if typeof opts.fields is 'string'
+        opts.fields = [opts.fields]
+      else if opts.fields not instanceof Array
+        throw new Error 'Field specification must be string or array: ' + opts.fields
+    unless isNaN opts.limit
+      opts.limit = parseInt opts.limit
+    unless isNaN opts.offset
+      opts.offset = parseInt opts.offset
+    return opts
+
   makeSortValueFormatter: (ascVal, descVal) ->
     return (v) ->
       if typeof v is 'string'

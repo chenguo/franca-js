@@ -64,5 +64,6 @@ module.exports =
     query = common.preprocess query
     filteredData = filterData data, query
     dataFacets = facets.generateFacets filteredData, query.facet
-    dataFacets = applyLimitOffsetOptions dataFacets, query.options
+    opts = optsCommon.canonicalizeOptions query.options
+    dataFacets = applyLimitOffsetOptions dataFacets, opts
     return dataFacets
