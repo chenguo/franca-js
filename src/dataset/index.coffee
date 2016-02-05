@@ -33,13 +33,17 @@ applySortOptions = (rows, options) ->
     rows.sort makeCmpFn orderings
   return rows
 
-applyOptions = (rows, options) ->
-  rows = applySortOptions rows, options
+applyLimitOffsetOptions = (rows, options = {}) ->
   offset = options.offset or 0
   if options.limit
     rows = rows.slice offset, offset + options.limit
   else
     rows = rows.slice offset
+  return rows
+
+applyOptions = (rows, options) ->
+  rows = applySortOptions rows, options
+  rows = applyLimitOffsetOptions rows, options
   return rows
 
 filterData = (rows, query) ->
@@ -60,4 +64,5 @@ module.exports =
     query = common.preprocess query
     filteredData = filterData data, query
     dataFacets = facets.generateFacets filteredData, query.facet
+    dataFacets = applyLimitOffsetOptions dataFacets, query.options
     return dataFacets

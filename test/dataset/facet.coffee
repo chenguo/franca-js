@@ -41,6 +41,13 @@ describe 'Test in-memory data facet generation', () ->
     results[1].value.should.equal 'Baz'
     results[2].value.should.equal 'Bar'
 
+  it 'should generate facets with limit', () ->
+    query =
+      facet: field: 'rating'
+      options: limit: 2
+    results = dataset.facets data.rows, query
+    results.length.should.equal 2
+
   it 'should generate facets with a query', () ->
     query =
       facet:
