@@ -50,19 +50,19 @@ evaluateBasicQuery = (row, query) ->
   return true
 
 evaluateMatchQuery = (row, query) ->
-  value = row[query.field]
+  value = _.get row, query.field
   if query.match instanceof Array
     return query.match.some (match) -> value is match
   else
     return value is query.match
 
 evaluateNullQuery = (row, query) ->
-  isNull = not row[query.field]?
+  isNull = not _.get(row, query.field)?
   return if query.null then isNull else not isNull
 
 evaluateRangeQuery = (row, query) ->
   range = query.range or {}
-  value = row[query.field]
+  value = _.get row, query.field
   return false unless value?
   failRangeCheck =
     (range.lt? and value >= range.lt) or
@@ -74,7 +74,7 @@ evaluateRangeQuery = (row, query) ->
 
 evaluateRegexpQuery = (row, query) ->
   pattern = new RegExp query.regexp, query.regFlags
-  value = row[query.field]
+  value = _.get row, query.field
   return pattern.test value
 
 evaluteFullTextQuery = (row, query) ->
