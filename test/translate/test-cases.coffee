@@ -15,6 +15,20 @@ module.exports =
       field: 'price'
       range: lte: 100
 
+  compoundQuery:
+    type: franca.TYPES.AND
+    options:
+      fields: ['brand', 'size']
+      table: testTable
+    queries: [
+      field: 'type'
+      match: 'pants'
+    ,
+      field: 'price'
+      range: lte: 100
+    ]
+
+
   sampleFacet:
     facet:
       field: 'city'
@@ -23,3 +37,8 @@ module.exports =
       field: 'population'
       range: gte: 1000000
     table: testTable
+
+  noTable:
+    type: franca.TYPES.Q
+    field: 'price'
+    match: 100

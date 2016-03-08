@@ -4,6 +4,7 @@ CLAUSES = ['SELECT', 'FROM', 'WHERE', 'GROUP BY', 'ORDER BY',
            'LIMIT', 'OFFSET']
 
 combineComponents = (components) ->
+  return components.RAW if components.RAW?
   components.SELECT ?= '*'
   pgQuery = CLAUSES.reduce (str, c) ->
     val = components[c]
