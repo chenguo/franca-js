@@ -11,8 +11,8 @@ singleCmp = (ordering, a, b) ->
   sortDir = ordering[1]
   f1 = _.get a, field
   f2 = _.get b, field
-  if f1 < f2 then dir = -1
-  else if f2 < f1 then dir = 1
+  if f1 < f2 or not f2? then dir = -1
+  else if f2 < f1 or not f1? then dir = 1
   else dir = 0
   return dir * sortDir
 
