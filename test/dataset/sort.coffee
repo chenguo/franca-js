@@ -33,7 +33,6 @@ describe 'Test sorting in memory data rows', () ->
     sortedRows = applySortOptions rows, opts
     sortedRows.length.should.eql rows.length
     ratingVals = sortedRows.map (r) -> r.rating
-    console.log ratingVals
     ratingVals.should.eql [
       25, 50, 60, 70, undefined, undefined,
       undefined, undefined, undefined
