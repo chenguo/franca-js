@@ -6,6 +6,7 @@ module.exports = (grunt) ->
     coffee:
       glob_to_multiple:
         expand: true
+        options: bare: true
         cwd: 'src'
         src: ['**/*.coffee']
         dest: 'lib'
