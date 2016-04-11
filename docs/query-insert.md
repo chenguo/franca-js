@@ -33,7 +33,7 @@ Proposed format:
 {
   "table": "example-table",
   "query": {
-    "field": "field1"
+    "field": "field1",
     "match": "baz"
   },
   "update": {
@@ -48,7 +48,7 @@ For Mongo, the operators are also supported in `update` key, like `$set`, `$setO
 {
   "table": "example-table",
   "query": {
-    "field": "field1"
+    "field": "field1",
     "match": "baz"
   },
   "update": {
@@ -65,7 +65,7 @@ Other than the particular operators of different databases, the behaviors may al
 {
   "table": "example-table",
   "query": {
-    "field": "field1"
+    "field": "field1",
     "match": "baz"
   },
   "update": {
@@ -86,7 +86,7 @@ An upsert operation attempts to update data rows, and when it does not find matc
 {
   "table": "example-table",
   "query": {
-    "field": "field1"
+    "field": "field1",
     "match": "baz"
   },
   "upsert": {
