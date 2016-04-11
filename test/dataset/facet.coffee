@@ -41,6 +41,13 @@ describe 'Test in-memory data facet generation', () ->
     results[1].value.should.equal 'Baz'
     results[2].value.should.equal 'Bar'
 
+  it 'should generate facets with limit', () ->
+    query =
+      facet: field: 'rating'
+      options: limit: 2
+    results = dataset.facets data.rows, query
+    results.length.should.equal 2
+
   it 'should generate facets with a query', () ->
     query =
       facet:
@@ -53,3 +60,12 @@ describe 'Test in-memory data facet generation', () ->
     results.should.containEql value: 1, count: 1
     results.should.containEql value: 2, count: 1
     results.should.containEql value: 3, count: 1
+
+  it 'should generate facets on nested field', () ->
+    query = facet: field: 'nested.val'
+    results = dataset.facets data.rows, query
+    results.length.should.equal 5
+    results.should.containEql value: 0, count: 1
+    results.should.containEql value: 3, count: 1
+    results.should.containEql value: 4, count: 2
+    results.should.containEql value: 8, count: 1

@@ -11,8 +11,8 @@ singleCmp = (ordering, a, b) ->
   sortDir = ordering[1]
   f1 = _.get a, field
   f2 = _.get b, field
-  if f1 < f2 then dir = -1
-  else if f2 < f1 then dir = 1
+  if f1 < f2 or not f2? then dir = -1
+  else if f2 < f1 or not f1? then dir = 1
   else dir = 0
   return dir * sortDir
 
@@ -33,13 +33,17 @@ applySortOptions = (rows, options) ->
     rows.sort makeCmpFn orderings
   return rows
 
-applyOptions = (rows, options) ->
-  rows = applySortOptions rows, options
+applyLimitOffsetOptions = (rows, options = {}) ->
   offset = options.offset or 0
   if options.limit
     rows = rows.slice offset, offset + options.limit
   else
     rows = rows.slice offset
+  return rows
+
+applyOptions = (rows, options) ->
+  rows = applySortOptions rows, options
+  rows = applyLimitOffsetOptions rows, options
   return rows
 
 filterData = (rows, query) ->
@@ -51,14 +55,16 @@ module.exports =
   makePredicate: makePredicate
 
   query: (data, query) ->
-    data = _.cloneDeep data
     query = common.preprocess query
     filteredData = filterData data, query
-    rows = applyOptions filteredData, query.options
+    opts = optsCommon.canonicalizeOptions query.options
+    rows = applyOptions filteredData, opts
     return rows
 
   facets: (data, query) ->
     query = common.preprocess query
     filteredData = filterData data, query
     dataFacets = facets.generateFacets filteredData, query.facet
+    opts = optsCommon.canonicalizeOptions query.options
+    dataFacets = applyLimitOffsetOptions dataFacets, opts
     return dataFacets

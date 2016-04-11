@@ -1,4 +1,3 @@
-require('coffee-script');
 common = require('./lib/common');
 translate = require('./lib/translate');
 

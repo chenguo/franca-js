@@ -1,3 +1,4 @@
+_ = require 'lodash'
 Set = require 'es6-set'
 facetCommon = require '../components/facet/common'
 
@@ -6,7 +7,7 @@ facetCommon = require '../components/facet/common'
 getFacetValues = (data, field) ->
   facets = []
   data.forEach (row) ->
-    val = row[field]
+    val = _.get row, field
     found = facets.some (f) ->
       if f.value is val
         f.count += 1

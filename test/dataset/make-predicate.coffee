@@ -62,6 +62,10 @@ queries =
     field: 'name'
     regexp: /^B/
 
+  nested:
+    field: "nested.val"
+    match: [0, 4]
+
 expected =
   empty:
     match: ['foo3', 'bar1', 'baz2']
@@ -109,6 +113,10 @@ expected =
   regexp:
     match: ['bar1', 'baz2']
     nonMatch: ['foo1', 'foo2', 'foo3']
+
+  nested:
+    match: ['baz2', 'foo3', 'bar1']
+    nonMatch: ['foo1', 'foo2', 'bar3', 'baz3']
 
 testEval = (test, negate) ->
   matches = expected[test].match or []
@@ -181,6 +189,12 @@ describe 'Query predicate tests', () ->
 
   it 'evaluate a negated regex query', () ->
     testNegateEval 'regexp'
+
+  it 'evaluate a nested field query', () ->
+    testEval 'nested'
+
+  it 'evaluate a negated nested field query', () ->
+    testNegateEval 'nested'
 
   it 'evaluate AND compound query', () ->
     query =

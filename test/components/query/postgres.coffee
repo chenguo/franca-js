@@ -138,9 +138,22 @@ describe 'Postgres query tests', () ->
     testNegatedQuery 'compound'
 
   it 'should translate a raw query', () ->
+    raw = 'select * from mytable'
     rawQuery =
       type: TYPES.RAW
-      raw: translations.nestedCompound
+      raw: raw
+    translated = query.toPg rawQuery
+    raw.should.be.eql translated
+
+  it 'should translate a nested raw query', () ->
+    rawQuery =
+      type: TYPES.OR
+      queries: [
+        testCases.basic
+      ,
+        type: TYPES.RAW
+        raw: translations.compound
+      ]
     translated = query.toPg rawQuery
     expected = translations.nestedCompound
     expected.should.be.eql translated

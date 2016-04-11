@@ -3,6 +3,15 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha-test'
 
   grunt.initConfig
+    coffee:
+      glob_to_multiple:
+        expand: true
+        options: bare: true
+        cwd: 'src'
+        src: ['**/*.coffee']
+        dest: 'lib'
+        ext: '.js'
+
     mochaTest:
 
       common: src: ['test/common/*.coffee']
@@ -24,9 +33,12 @@ module.exports = (grunt) ->
       solr: src: ['**/solr.coffee']
 
 
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
+
+  grunt.registerTask 'compile', 'coffee'
 
   grunt.registerTask 'default',
-    ['mochaTest:common', 'mochaTest:translate', 'mochaTest:facet',
+    ['compile', 'mochaTest:common', 'mochaTest:translate', 'mochaTest:facet',
      'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:dataset']
 
   grunt.registerTask 'mongo', 'mochaTest:mongo'
@@ -34,3 +46,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'postgres', 'mochaTest:postgres'
 
   grunt.registerTask 'solr', 'mochaTest:solr'
+

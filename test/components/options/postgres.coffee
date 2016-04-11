@@ -35,9 +35,6 @@ describe 'Postgres options tests', () ->
   it 'should translate empty options', () ->
     testOptions 'empty'
 
-  it 'should throw error when table is not given', () ->
-    options.toPg.bind(null, {}).should.throw()
-
   it 'should translate an offset option', () ->
     testOptions 'offset'
 

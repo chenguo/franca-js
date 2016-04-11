@@ -32,7 +32,7 @@ This is required for SQL because the table name is required as a part of the que
 ```json
 {
   "options": {
-    "table": "sandwiches"
+    "table": "sandwiches",
     "fields": ["bread", "cheese"]
   }
 }

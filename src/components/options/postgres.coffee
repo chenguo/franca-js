@@ -32,8 +32,6 @@ class PostgresOptions extends BaseOptions
   tableOptions: (opts) ->
     if opts.table?
       return FROM: opts.table
-    else
-      throw new Error 'No table specified'
 
 
 module.exports = (new PostgresOptions).convertOptions
