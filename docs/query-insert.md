@@ -5,6 +5,7 @@ This is a preliminary spec on how to represent insert / update operations in a F
 ## Table of Contents
 * [Insert](#insert)
 * [Update](#update)
+* [Upsert](#upsert)
 
 ## Insert
 
@@ -35,12 +36,47 @@ Proposed format:
     "field": "field1"
     "match": "baz"
   },
-  "update": { }
+  "update": {
+    "field2": "value2",
+    "field3": "value3"
+  }
 }
 ```
 
-The details of the update subkey is still under consideration
+For Mongo, the operators are also supported in `update` key, like `$set`, `$setOnInsert` and so on. In that case, the format may look like:
+```json
+{
+  "table": "example-table",
+  "query": {
+    "field": "field1"
+    "match": "baz"
+  },
+  "update": {
+    "$set": {
+      "field2": "value2",
+      "field3": "value3"
+    }
+  }
+}
+```
 
+Other than the particular operators of different databases, the behaviors may also different for different backends. Like Postgres will update all matched rows whereas Mongo doesn't. So the `options` key could solve this kind of problem. In Mongo, you can set `multi` to perform the same result:
+```json
+{
+  "table": "example-table",
+  "query": {
+    "field": "field1"
+    "match": "baz"
+  },
+  "update": {
+    "field2": "value2",
+    "field3": "value3"
+  },
+  "options" : {
+    "multi": true
+  }
+}
+```
 
 ## Upsert
 
@@ -53,9 +89,11 @@ An upsert operation attempts to update data rows, and when it does not find matc
     "field": "field1"
     "match": "baz"
   },
-  "update": { }
-  "upsert": true
+  "upsert": {
+    "field2": "value2",
+    "field3": "value3"
+  }
 }
 ```
 
-For upserts, the query field is not needed when the backend is a relational database. For Mongo, it may be optional depending on the contents of the ```update``` payload. This is still under consideration.
+For relational database, the query field is not needed, like Postgres, because it's actually an `INSERT ... ON CONFLICT ...` command which implicitly requires `PRIMARY KEY` in `upsert`. For NO_SQL database like Mongo, it may be optional depending on the contents of the ```upsert``` payload. This is still under consideration.
