@@ -6,10 +6,12 @@ This is a preliminary spec on how to represent insert / update operations in a F
 * [Insert](#insert)
 * [Update](#update)
 * [Upsert](#upsert)
+* [Remove](#remove)
+
 
 ## Insert
 
-An insert operation can add new row to a data resource.
+An insert operation can add a new row to a data resource.
 
 Proposed format:
 ```json
@@ -38,7 +40,7 @@ Or you can insert multi rows just by assigning an array to `insert`:
 
 ## Update
 
-An update operation applies update operations to existing rows in a data resource.
+This operation applies update operations to existing rows in a data resource.
 
 Proposed format:
 ```json
@@ -90,9 +92,7 @@ In Mongo, this will replace the entire row that matches `{"field1": "baz"}` with
 ```
 will remove `field2` and `field3`.
 
-
-
-Update will only update the first matched row by default, but you can set a `multi` key in `options` to update all matched rows:
+By default update action will update all the matched rows(for Mongo which means implicitly setting `{"multi": true}`), but you can set `{"justOne": true}` in `options` to update first matched row:
 ```json
 {
   "table": "example-table",
@@ -105,14 +105,15 @@ Update will only update the first matched row by default, but you can set a `mul
     "field3": "bar"
   },
   "options" : {
-    "multi": true
+    "justOne": true
   }
 }
 ```
-So in Postgres, if you don't speicify the `multi`, it will be translated to somthing like:
+So in Postgres, if you speicify the `{"justOne": true}` explicitly, it will be translated to somthing like:
 ```sql
 UPDATE example-table SET field2='foo', field3='bar' WHERE ID=(SELECT ID FROM example-table WHERE field1='baz' ORDER BY ID LIMIT 1)
 ```
+
 
 ## Upsert
 
@@ -158,3 +159,34 @@ The `{"type": "RAW"}` is also supported in case some special cases are needed:
   }
 }
 ```
+
+
+## Remove
+
+The remove operation will delete rows from a data resource.
+
+Proposed format:
+```json
+{
+  "table": "example-table",
+  "remove": {
+    "field1": "foo",
+    "field2": "bar"
+  }
+}
+```
+This will delete all rows that matched `{"field1": "foo", "field2": "bar"}`.
+Same with Update, the default action is delete all matched rows, if you just want to delete first matched row, just assign a `justOne` flag:
+```json
+{
+  "table": "example-table",
+  "remove": {
+    "field1": "foo",
+    "field2": "bar"
+  },
+  "options": {
+    "justOne": true
+  }
+}
+```
+
