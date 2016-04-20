@@ -92,7 +92,7 @@ In Mongo, this will replace the entire row that matches `{"field1": "baz"}` with
 ```
 will remove `field2` and `field3`.
 
-By default update action will update all the matched rows(for Mongo which means implicitly setting `{"multi": true}`), but you can set `{"justOne": true}` in `options` to update first matched row:
+By default update action will update all the matched rows(for Mongo which means implicitly setting `{"multi": true}`), but you can set `{"singleRow": true}` in `options` to update first matched row:
 ```json
 {
   "table": "example-table",
@@ -105,11 +105,11 @@ By default update action will update all the matched rows(for Mongo which means 
     "field3": "bar"
   },
   "options" : {
-    "justOne": true
+    "singleRow": true
   }
 }
 ```
-So in Postgres, if you speicify the `{"justOne": true}` explicitly, it will be translated to somthing like:
+So in Postgres, if you speicify the `{"singleRow": true}` explicitly, it will be translated to somthing like:
 ```sql
 UPDATE example-table SET field2='foo', field3='bar' WHERE ID=(SELECT ID FROM example-table WHERE field1='baz' ORDER BY ID LIMIT 1)
 ```
@@ -176,7 +176,7 @@ Proposed format:
 }
 ```
 This will delete all rows that matched `{"field1": "foo", "field2": "bar"}`.
-Same with Update, the default action is delete all matched rows, if you just want to delete first matched row, just assign a `justOne` flag:
+Same with Update, the default action is delete all matched rows, if you just want to delete first matched row, just assign a `singleRow` flag:
 ```json
 {
   "table": "example-table",
@@ -185,7 +185,7 @@ Same with Update, the default action is delete all matched rows, if you just wan
     "field2": "bar"
   },
   "options": {
-    "justOne": true
+    "singleRow": true
   }
 }
 ```
