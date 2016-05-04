@@ -1,9 +1,10 @@
+common = require '../../common'
 BaseQuery = require './base'
 
 class SolrQuery extends BaseQuery
 
   toNative: (query) =>
-    query = @objectify query
+    query = common.objectify query
     solrQuery = @buildQuery query
     return solrQuery
 
