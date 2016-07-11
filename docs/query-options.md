@@ -9,6 +9,8 @@ This document describes the ```options``` key of a Franca query object.
 * [offset](#options-offset)
 * [limit](#options-limit)
 * [sort](#options-sort)
+* [singleRow](#options-singlerow)
+* [primaryKey](#options-primarykey)
 
 
 <a name="options-overview"/>
@@ -143,3 +145,34 @@ The following values can be used to specify sort order (case insensitive):
 
 * 1, "1", "asc", "ascending": ascending order
 * -1, "-1", "desc", "descending": descending order
+
+<a name="options-singlerow">
+## Single Row
+
+The singleRow option specifies if user wants to write against only the first matched row or not. The default is `false`.
+
+```json
+{
+  "type": "UPDATE",
+  "query": {},
+  "write": {},
+  "options": {
+    "singleRow": true
+  }
+}
+```
+
+<a name="options-primarykey">
+## Primary Field
+
+The primaryField option is only for SQL database like Postgres, need to be specified when do Upsert and `singleRow` write(Update/Remove). String and array of strings(multiple fields consists of primary key) are both accepted.
+
+```json
+{
+  "type": "REMOVE",
+  "query": {},
+  "options": {
+    "primaryField": "ID"
+  }
+}
+```

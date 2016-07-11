@@ -27,6 +27,14 @@ TYPES holds the following types, whose values are the same as the type.
 * ```TYPES.AND```: for AND compound queries
 * ```TYPES.OR```: for OR compound queries
 * ```TYPES.RAW```: for RAW queries
+* `TYPES.INSERT`: for regular INSERT operation request
+* `TYPES.UPDATE`: for regular UPDATE operation request
+* `TYPES.UPSERT`: for regular UPSERT operation request
+* `TYPES.REMOVE`: for regular REMOVE operation request
+* `TYPES.RAW_INSERT`: for RAW INSERT operation request
+* `TYPES.RAW_UPDATE`: for RAW UPDATE operation request
+* `TYPES.RAW_UPSERT`: for RAW UPSERT operation request
+* `TYPES.RAW_REMOVE`: for RAW REMOVE operation request
 
 <a name="franca-translate"/>
 ## translate
