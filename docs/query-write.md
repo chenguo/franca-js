@@ -1,12 +1,11 @@
 # Write Operations
 
-This is a preliminary spec on how to represent insert / update / upsert / remove operations in a Franca query object.
+This is a preliminary spec on how to represent insert / update / remove operations in a Franca query object.
 
 
 ## Table of Contents
 * [Insert](#insert)
 * [Update](#update)
-* [Upsert](#upsert)
 * [Remove](#remove)
 
 
@@ -49,11 +48,12 @@ Note that for SQL db like Postgres, if you insert multiple rows with different f
 INSERT INTO example-table (field1, field2, field3) VALUES ('foo1', 'bar1', null), ('foo2', 'bar2', 'test3')
 ```
 
-By specifying `RAW_INSERT` to `type` and the raw insert statement into `raw`, Franca won't translate the insert statement:
+By specifying a `RAW` type, and an action to `action_type`, Franca won't translate the insert statement:
 
 ```json
 {
-  "type": "RAW_INSERT",
+  "type": "RAW",
+  "action_type": "ACTION_INSERT",
   "table": "example-table",
   "raw": "(field1, field2) VALUES ('foo1', 'bar1'), ('foo2', 'bar2')"
 }
@@ -67,15 +67,17 @@ INSERT INTO example-table (field1, field2) VALUES ('foo1', 'bar1'), ('foo2', 'ba
 
 ## Update
 
-This operation applies update operations to existing rows in a data resource.
+This operation applies update/upsert operations to existing rows in a data resource.
 
-You need to specify the `query`, and put update data into `write`. Proposed format:
+### Update Dedicated
+
+You need to specify a query to `base`, and put update data into `write`. Proposed format:
 
 ```json
 {
   "type": "UPDATE",
   "table": "example-table",
-  "query": {
+  "base": {
     "field": "field1",
     "match": "baz"
   },
@@ -86,11 +88,12 @@ You need to specify the `query`, and put update data into `write`. Proposed form
 }
 ```
 
-Note that Update will only update the fields you specify, instead of replacing the entire row. Which means for Mongo, it implicitly adds the `$set` operator. If you want to update with the backend original intention, or use some special operators, you can specify a `RAW_UPSERT` to `type`, and Franca won't translate the query/write in `raw`:
+Note that Update will only update the fields you specify, instead of replacing the entire row. Which means for Mongo, it implicitly adds the `$set` operator. If you want to update with the backend original intention, or use some special operators, you can specify a `RAW` type(as well as an action type), and Franca won't translate the query/write in `raw`:
 
 ```json
 {
-  "type": "RAW_UPDATE",
+  "type": "RAW",
+  "action_type": "ACTION_UPDATE",
   "table": "example-table",
   "raw": {
     "query": {
@@ -108,7 +111,8 @@ In Mongo, this will replace the entire row that matches `{"field1": "baz"}` with
 
 ```json
 {
-  "type": "RAW_UPDATE",
+  "type": "RAW",
+  "action_type": "ACTION_UPDATE",
   "table": "example-table",
   "raw": {
     "query": {
@@ -132,7 +136,7 @@ By default update action will update all the matched rows(for Mongo which means 
 {
   "type": "UPDATE",
   "table": "example-table",
-  "query": {
+  "base": {
     "field": "field1",
     "match": "baz"
   },
@@ -151,14 +155,15 @@ Note that in Postgres, default update action will update all matched rows. The o
 UPDATE example-table SET field2='foo', field3='bar' WHERE ID=(SELECT ID FROM example-table WHERE field1='baz' ORDER BY ID LIMIT 1)
 ```
 
+### Upsert Dedicated
 
-## Upsert
+Update also covers the Upsert case, just by adding a dedicated pair of key/value: `upsert: true`. But the actual behaviours are different among various databases.
 
-Upsert is a little special. For Mongo, it attempts to update data rows that match a specific query, and inserts the document if it finds no matching rows. Which means the upsert action for Mongo is actually based on `query`, so you need to assign the query to `base` and update data to `write`:
+For Mongo, it attempts to update data rows(with doc in `write`) that match a specific query(`base`), and inserts the document if it finds no matching rows. So you need to assign the query to `base` and update doc to `write`:
 
 ```json
 {
-  "type": "UPSERT",
+  "type": "UPDATE",
   "table": "example-table",
   "base": {
     "type": "AND",
@@ -178,11 +183,11 @@ Upsert is a little special. For Mongo, it attempts to update data rows that matc
 }
 ```
 
-For relational database, like Postgres, it's actually based on Insert. It's an `INSERT ... ON CONFLICT ...` statement which implicitly requires `PRIMARY KEY` for conflict checking. The following Franca upsert query is for Postgres specifically, note that query object in `base` can only be an insert statement instead of a query one:
+For relational database, like Postgres, the Upsert action is actually based on Insert. It's an `INSERT ... ON CONFLICT ...` statement which implicitly requires `PRIMARY KEY` for conflict checking. The following Franca update query is for Postgres Upsert specifically, note that query object in `base` can only be an insert statement instead of a query one:
 
 ```json
 {
-  "type": "UPSERT",
+  "type": "UPDATE",
   "table": "example-table",
   "base": {
     "field": "field1",
@@ -195,12 +200,12 @@ For relational database, like Postgres, it's actually based on Insert. It's an `
 }
 ```
 
-
-The `{"type": "RAW_UPSERT"}` is also supported in case some special cases are needed, the statements in `raw` won't be translated:
+The `RAW` type is also supported in case some special cases are needed, the statements in `raw` won't be translated:
 
 ```json
 {
-  "type": "RAW_UPSERT",
+  "type": "RAW",
+  "action_type": "ACTION_UPDATE",
   "table": "example-table",
   "raw": {
     "query": {
@@ -225,7 +230,7 @@ The `{"type": "RAW_UPSERT"}` is also supported in case some special cases are ne
 
 ## Remove
 
-The remove operation will delete rows from a data resource.
+The remove operation will delete rows from a data source.
 
 Proposed format:
 
@@ -247,7 +252,7 @@ Same with Update, the default action is deleting all matched rows, if you just w
 {
   "type": "REMOVE",
   "table": "example-table",
-  "write": {
+  "query": {
     "field1": "foo",
     "field2": "bar"
   },

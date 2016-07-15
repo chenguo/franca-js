@@ -5,6 +5,7 @@ This document describes the top level Franca API available by requiring 'franca-
 ## Table of Contents
 * [query object](#franca-query)
 * [TYPES](#franca-types)
+* [ACTION_TYPES](#franca-action-types)
 * [translate](#franca-translate)
 * [dataset](#franca-dataset)
 
@@ -27,14 +28,18 @@ TYPES holds the following types, whose values are the same as the type.
 * ```TYPES.AND```: for AND compound queries
 * ```TYPES.OR```: for OR compound queries
 * ```TYPES.RAW```: for RAW queries
-* `TYPES.INSERT`: for regular INSERT operation request
-* `TYPES.UPDATE`: for regular UPDATE operation request
-* `TYPES.UPSERT`: for regular UPSERT operation request
-* `TYPES.REMOVE`: for regular REMOVE operation request
-* `TYPES.RAW_INSERT`: for RAW INSERT operation request
-* `TYPES.RAW_UPDATE`: for RAW UPDATE operation request
-* `TYPES.RAW_UPSERT`: for RAW UPSERT operation request
-* `TYPES.RAW_REMOVE`: for RAW REMOVE operation request
+* ```TYPES.INSERT```: for regular INSERT operation request
+* ```TYPES.UPDATE```: for regular UPDATE operation request
+* ```TYPES.REMOVE```: for regular REMOVE operation request
+
+<a name="franca-action-types"/>
+## ACTION_TYPES
+
+```franca.ACTION_TYPES``` is for `RAW` write operation specifically, to denote what action this query takes on, so that Franca can correctly translate the query. `ACTION_TYPES` holds following types:
+
+* ```ACTION_TYPES.INSERT = "ACTION_INSERT"```: specifies insert action
+* ```ACTION_TYPES.UPDATE = "ACTION_UPDATE"```: specifies update action
+* ```ACTION_TYPES.REMOVE = "ACTION_REMOVE"```: specifies remove action
 
 <a name="franca-translate"/>
 ## translate
