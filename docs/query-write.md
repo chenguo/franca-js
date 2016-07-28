@@ -71,13 +71,13 @@ This operation applies update/upsert operations to existing rows in a data resou
 
 ### Update Dedicated
 
-You need to specify a query to `base`, and put update data into `write`. Proposed format:
+You need to specify a query to `query`, and put update data into `write`. Proposed format:
 
 ```json
 {
   "type": "UPDATE",
   "table": "example-table",
-  "base": {
+  "query": {
     "field": "field1",
     "match": "baz"
   },
@@ -107,7 +107,7 @@ Note that Update will only update the fields you specify, instead of replacing t
   }
 }
 ```
-In Mongo, this will replace the entire row that matches `{"field1": "baz"}` with `{"field2": "foo", "field3": "bar"}`. And
+In Mongo, this will replace the entire row that matches `{"field1": "baz"}` with the doc `{"field2": "foo", "field3": "bar"}`. And
 
 ```json
 {
@@ -136,7 +136,7 @@ By default update action will update all the matched rows(for Mongo which means 
 {
   "type": "UPDATE",
   "table": "example-table",
-  "base": {
+  "query": {
     "field": "field1",
     "match": "baz"
   },
@@ -149,7 +149,7 @@ By default update action will update all the matched rows(for Mongo which means 
   }
 }
 ```
-Note that in Postgres, default update action will update all matched rows. The only way to update first match is ordering the queried results and select the first one by unique key, so in Postgres you need to speicify an extra `options` `{"primaryField": "ID"}` explicitly, it will be translated to somthing like:
+Note that in Postgres, default update action will update all matched rows. The only way to update first match row is to sort the queried results and select the first one by unique key, so in Postgres you need to speicify an extra `options` `{"primaryField": "ID"}` explicitly, it will be translated to somthing like:
 
 ```sql
 UPDATE example-table SET field2='foo', field3='bar' WHERE ID=(SELECT ID FROM example-table WHERE field1='baz' ORDER BY ID LIMIT 1)
@@ -157,15 +157,16 @@ UPDATE example-table SET field2='foo', field3='bar' WHERE ID=(SELECT ID FROM exa
 
 ### Upsert Dedicated
 
-Update also covers the Upsert case, just by adding a dedicated pair of key/value: `upsert: true`. But the actual behaviours are different among various databases.
+Update also covers the Upsert case, just by adding a dedicated pair of key/value: `upsert: true`. But there're some different among various databases.
 
-For Mongo, it attempts to update data rows(with doc in `write`) that match a specific query(`base`), and inserts the document if it finds no matching rows. So you need to assign the query to `base` and update doc to `write`:
+For Mongo, it attempts to update data rows(with doc in `write`) that match a specific `query`, and inserts the document if it finds no matching rows. So you need to assign the query to `query` and update doc to `write`:
 
 ```json
 {
   "type": "UPDATE",
   "table": "example-table",
-  "base": {
+  "upsert": true,
+  "query": {
     "type": "AND",
     "queries": [{
         "field": "field1",
@@ -183,19 +184,40 @@ For Mongo, it attempts to update data rows(with doc in `write`) that match a spe
 }
 ```
 
-For relational database, like Postgres, the Upsert action is actually based on Insert. It's an `INSERT ... ON CONFLICT ...` statement which implicitly requires `PRIMARY KEY` for conflict checking. The following Franca update query is for Postgres Upsert specifically, note that query object in `base` can only be an insert statement instead of a query one:
+For relational database, like Postgres, the Upsert action is actually based on Insert, which is an `INSERT ... ON CONFLICT …` statement.
+
+Semantically speaking, FrancaJS will
+
+* treat the doc in `query` as the conflict target(fields in `ON CONFLICT ()`)
+* if any conflict detected(means the conflict target values are the same), update with the doc in `write` 
+* otherwise insert a doc that is th merge result of `query` and `write`.
+
+Due to the natural limit of Postgres `upsert` action, we set 2 contraints on Postgres `upsert`:
+
+* The `query` could only be i.) a single match query, or ii.) an `AND` compound `queries`, each sub query of which is a single match query. In other words, the `query` could be translated to a simple object that only contains keys(fields) and values, so you should not use type/keywords including but not limited to `RAW`, `OR`, `regex`, `facet`, `range` and so on.
+* The translated `query`(simple k/v version) and `write` are not allowed having field that have collided value, like `{"query": {"foo": 1}, "write": {"foo": 2}}` is forbidened because `"foo"` has different values in `query` and `write`, but `{"query": {"foo": 1}, "write": {"foo": 1}}` is fine.
+
+ The following Franca update query is for Postgres Upsert specifically:
 
 ```json
 {
   "type": "UPDATE",
   "table": "example-table",
-  "base": {
-    "field": "field1",
-    "match": "baz"
+  "upsert": true,
+  "query": {
+    "type": "AND",
+    "queries": [{
+        "field": "field1",
+        "match": "foo1"
+      },
+      {
+        "field": "field2",
+        "match": "bar1"
+      }]
   },
   "write": {
-    "field2": "foo",
-    "field3": "bar"
+    "field2": "bar1",  // Or this line could be omitted in favor of "query"
+    "field3": "test2"
   }
 }
 ```
