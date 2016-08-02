@@ -4,8 +4,9 @@ The Franca query object is a common representation for basic data filters and an
 
 ## Table of Contents
 * [Overview](#overview)
-* [Query](#query)
+* [Data Filter](#query)
 * [Query Options](#options)
+* [Write Operations](#write)
 * [Extensions](#extensions)
 
 <a name="overview"/>
@@ -41,24 +42,40 @@ The query object has two main components:
 If neither of the above keys are explicitly stated, the query object is assumed to be solely a logical query (i.e. what would go under the ```query``` subkey).
 
 <a name="query"/>
-## Query
+## Data Filter
 
-The ```query``` subkey holds the core conditional logic for matching database rows, like looking for rows that match a specific value, a free text query, or even a raw query that is passed unprocessed to the data backend.
+The ```query``` or ```filter``` subkey holds the core conditional logic for matching database rows, like looking for rows that match a specific value, a free text query, or even a raw query that is passed unprocessed to the data backend.
 
 Please see [full query documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-query.md).
 
 <a name="options"/>
 ## Options
 
-Options can be passed to a Franca query to denote things like how many rows to return and how to sort them. Support options:
+Options can be passed to a Franca query to denote things like how many rows to return, how to sort them and take write effect on only first matched or all matched rows. Support options:
+
+***Common Option***:
 
 * **table**: DB table against which query is made
+
+***Read Option***:
+
 * **fields**: columns to return in query
 * **offset**: how many rows to skip in the list of returned results. Analagous to SQL's ```OFFSET```
 * **limit**: the max number of rows to return. Analogous to SQL's ```LIMIT```
 * **sort**: specify the field(s) to sort on. Can be specified in both array form and object form, similar to how Mongo's Node driver accepts sort options.
 
+***Write Option***:
+
+* **singleRow**: tell Franca if only take (write operation)effect on the first matched row, default is `false`.
+* **primaryKey**: specify the primary key, this is usually just for SQL db. And currently for PostgreSQL, it is required when set the `singleRow: true` and do `upsert` operation, see also `query-write.md`.
+
+
 Please see [full options documentation](https://github.com/chenguo/franca-js/blob/master/docs/query-options.md).
+
+<a name="write"/>
+## Write operations
+
+Write operations are currently being planned, and include generic insert and update operations. Please see [RFC](https://github.com/chenguo/franca-js/blob/master/docs/query-insert.md) here.
 
 <a name="extensions"/>
 ## Extensions

@@ -63,3 +63,17 @@ module.exports =
         else
           throw new Error 'Invalid field sort direction: ' + v
       return v
+
+  # Ensure an input is a JSON object
+  objectify: (input) ->
+    if 'string' is typeof input
+      try
+        q = JSON.parse input
+      catch e
+        throw new Error "Failed to parse: #{input} -- #{e}"
+    else if input instanceof Object
+      q = input
+    else
+      throw new Error "Malformed input query: #{input}"
+    return q
+

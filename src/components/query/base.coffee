@@ -5,22 +5,9 @@ class BaseQuery
   TYPES: common.TYPES
 
   convertQuery: (query) =>
-    query = @objectify query
+    query = common.objectify query
     converted = @buildQuery query
     return converted
-
-  # Ensure a query is a JSON object
-  objectify: (input) ->
-    if 'string' is typeof input
-      try
-        q = JSON.parse input
-      catch e
-        throw new Error 'Failed to parse string query: ' + e
-    else if input instanceof Object
-      q = input
-    else
-      throw new Error 'Malformed input query: ' + input
-    return q
 
   buildQuery: (q) ->
     switch q.type
