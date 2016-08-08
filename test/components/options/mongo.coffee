@@ -16,6 +16,13 @@ translations =
       area: 1
       weight: 1
   sortArr: sort: [['name', -1], ['address', 1]]
+  singleUpdate: multi: false
+  mongoMultipleUpsert:
+    upsert: true
+    multi: true
+  singleRemove: justOne: true
+  multipleRemove: justOne: false
+
 
 translations.sortObj = translations.sortArr
 translations.combined =
@@ -26,6 +33,7 @@ translations.combined =
 
 
 testOptions = common.makeTester testCases, options.toMongo, translations
+testOptionsWithQuery = common.makeSpecifiedFieldTesterWithQuery testCases, options.toMongo, translations, 'options'
 
 describe 'Mongo options tests', () ->
 
@@ -55,3 +63,15 @@ describe 'Mongo options tests', () ->
       table: 'myCollection'
     expected = collection: 'myCollection'
     common.testTranslation options.toMongo, expected, colQuery
+
+  it 'should translate to just one update', () ->
+    testOptionsWithQuery 'singleUpdate'
+
+  it 'should translate to multiple upsert', () ->
+    testOptionsWithQuery 'mongoMultipleUpsert'
+
+  it 'should translate to just one delete', () ->
+    testOptionsWithQuery 'singleRemove'
+
+  it 'should translate to multiple delete', () ->
+    testOptionsWithQuery 'multipleRemove'

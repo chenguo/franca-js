@@ -7,19 +7,19 @@ common = require '../../common'
 
 testTable = 'pgTable'
 translations =
-  empty: FROM: testTable
+  empty: table: testTable
   offset:
-    FROM: testTable
-    OFFSET: 100
+    table: testTable
+    offset: 100
   limit:
-    FROM: testTable
-    LIMIT: 10
+    table: testTable
+    limit: 10
   fields:
-    FROM: testTable
-    SELECT: 'volume, area, weight'
+    table: testTable
+    select: 'volume, area, weight'
   sortArr:
-    FROM: testTable
-    'ORDER BY': 'name DESC, address ASC'
+    table: testTable
+    orderBy: 'name DESC, address ASC'
 
 translations.sortObj = translations.sortArr
 translations.combined =

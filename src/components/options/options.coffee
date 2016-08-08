@@ -18,13 +18,18 @@ class BaseOptions
   formatSortOpts: (opts) =>
     return optsCommon.getSorts opts, @formatSortValue
 
-  convertOptions: (opts) =>
+  multiRowOptions: () -> {}
+
+  upsertOptions: () -> {}
+
+  miscOptions: () -> {}
+
+  convertOptions: (opts, q) =>
     opts = optsCommon.canonicalizeOptions opts
-    rowOpts = @rowOptions opts
-    sortOpts = @sortOptions opts
-    fieldOpts = @fieldOptions opts
-    tableOpts = @tableOptions opts
-    merged = _.merge rowOpts, sortOpts, fieldOpts, tableOpts
-    return merged
+    arrOfOpts = [
+      @rowOptions, @sortOptions, @fieldOptions, @tableOptions,
+      @multiRowOptions, @upsertOptions, @miscOptions
+    ].map (optFn) => optFn.call @, opts, q
+    return _.merge.apply _, arrOfOpts
 
 module.exports = BaseOptions
