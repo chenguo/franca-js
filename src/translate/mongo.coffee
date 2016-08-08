@@ -1,7 +1,10 @@
 _ = require 'lodash'
 components = require '../components'
 
-KEYS = ['query', 'options', 'pipeline', 'collection']
+KEYS = [
+  'query', 'insert', 'update', 'remove',
+  'options', 'pipeline', 'collection'
+]
 
 module.exports = (q) ->
   c = components.toMongo q
