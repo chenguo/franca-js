@@ -142,9 +142,7 @@ class PostgresQuery extends BaseQuery
   buildRawImpl: (q) ->
     rawQuery = q.raw
     if 'string' is not typeof rawQuery
-      throw new Error 'Raw Solr query is not a string: ' + rawQuery
+      throw new Error 'Raw Postgres query is not a string: ' + rawQuery
     return rawQuery
 
-
 module.exports = (new PostgresQuery).convertQuery
-

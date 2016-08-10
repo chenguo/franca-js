@@ -36,7 +36,7 @@ class BaseQuery
     return if query? then query else {}
 
   notImplemented: ->
-    throw new Error 'not implemented'
+    throw new Error 'not implemented in Query Component'
 
   # Raw query passthrough
   buildRaw: (q) ->

@@ -1,4 +1,5 @@
 _ = require 'lodash'
+TYPES = require('../../../lib/common').TYPES
 
 limit = limit: 10
 offset = offset: 100
@@ -8,6 +9,8 @@ sortObj =
   sort:
     name: 'Descending'
     address: 'asc'
+single = singleRow: true
+multiple = singleRow: false
 
 module.exports =
   empty: {}
@@ -17,3 +20,22 @@ module.exports =
   sortArr: sortArr
   sortObj: sortObj
   combined: _.merge {}, offset, limit, fields, sortArr
+  singleUpdate:
+    type: TYPES.UPDATE
+    query: {}
+    write: {}
+    options: single
+  mongoMultipleUpsert:
+    type: TYPES.UPDATE
+    upsert: true
+    query: {}
+    write: {}
+    options: multiple
+  singleRemove:
+    type: TYPES.REMOVE
+    query: {}
+    options: single
+  multipleRemove:
+    type: TYPES.REMOVE
+    query: {}
+    options: multiple

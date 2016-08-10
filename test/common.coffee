@@ -1,4 +1,4 @@
-require 'should'
+should = require 'should'
 _ = require 'lodash'
 
 negateQuery = (q) ->
@@ -6,12 +6,15 @@ negateQuery = (q) ->
   negated.negate = not q.negate
   return negated
 
+translatedTester = (translated, expected) ->
+  if translated instanceof Object
+    translated.should.be.eql expected
+  else
+    should.equal translated, expected # in case the translated is null or undefined
+
 testTranslation = (translator, expected, query) ->
   translated = translator query
-  if translated instanceof Object
-    expected.should.be.eql translated
-  else
-    expected.should.be.equal translated
+  translatedTester translated, expected
 
 module.exports =
   negateSpec: negateQuery
@@ -23,6 +26,14 @@ module.exports =
       query = tests[key]
       expected = translations[key]
       testTranslation translator, expected, query
+
+  makeSpecifiedFieldTesterWithQuery: (tests, translator, translations, field) ->
+    return (key) ->
+      query = tests[key]
+      specifiedVal = query[field]
+      expected = translations[key]
+      translated = translator specifiedVal, query
+      translatedTester translated, expected
 
   makeNegateQueryTester: (queries, translator, negatedTranslations) ->
     return (key) ->

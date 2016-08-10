@@ -1,3 +1,21 @@
+_ = require 'lodash'
+
+TYPES =
+  Q: 'Q'
+  AND: 'AND'
+  OR: 'OR'
+  RAW: 'RAW'
+  INSERT: 'INSERT'
+  UPDATE: 'UPDATE'
+  REMOVE: 'REMOVE'
+
+ACTION_TYPES =
+  QUERY: 'ACTION_QUERY'
+  FACET: 'ACTION_FACET'
+  INSERT: 'ACTION_INSERT'
+  UPDATE: 'ACTION_UPDATE'
+  REMOVE: 'ACTION_REMOVE'
+
 ensureNumericValue = (obj, field) ->
   if obj[field]?
     val = parseInt obj[field]
@@ -23,7 +41,7 @@ canonicalizeQuery = (q) ->
   query = switch
     when q.query? then q.query
     when q.filter? then q.filter
-    when not q.facet? then q
+    when not isWrite(q) and not q.facet? then q
     else {}
 
 isAscVal = (v) ->
@@ -36,19 +54,87 @@ isDescVal = (v) ->
     when -1, '-1', 'desc', 'descending' then true
     else false
 
+
+isRaw = (q) ->
+  TYPES.RAW is q.type
+
+isRegularWrite = (q) ->
+  switch q.type
+    when TYPES.INSERT, TYPES.UPDATE, TYPES.REMOVE
+      true
+    else
+      false
+
+isRawWrite = (q) ->
+  return false unless isRaw q
+  switch q.action_type
+    when ACTION_TYPES.INSERT, ACTION_TYPES.UPDATE, ACTION_TYPES.REMOVE
+      true
+    else
+      false
+
+isWrite = (q) ->
+  isRegularWrite(q) or isRawWrite(q)
+
+# classification specifies if it's the regular,
+# raw or either type. Default is 'either'
+validateClassification = (classification) ->
+  return 'either' unless 'string' is typeof classification
+  classification = classification.trim().toLowerCase()
+  switch classification
+    when 'regular', 'raw'
+      classification
+    else
+      'either'
+
+checkRegularType = (q, checkType) ->
+  TYPES[checkType] is q.type
+
+checkRawType = (q, checkType) ->
+  (TYPES.RAW is q.type) and (ACTION_TYPES[checkType] is q.action_type)
+
+commonCheckType = (q, checkType, classification = 'either') ->
+  classification = validateClassification classification
+  switch classification
+    when 'regular'
+      checkRegularType q, checkType
+    when 'raw'
+      checkRawType q, checkType
+    when 'either'
+      (checkRegularType q, checkType) or (checkRawType q, checkType)
+
+isInsert = (q, classification = 'either') ->
+  commonCheckType q, 'INSERT', classification
+
+isUpdate = (q, classification = 'either') ->
+  q.upsert isnt true and commonCheckType q, 'UPDATE', classification
+
+isUpsert = (q, classification = 'either') ->
+  q.upsert is true and commonCheckType q, 'UPDATE', classification
+
+isRemove = (q, classification = 'either') ->
+  commonCheckType q, 'REMOVE', classification
+
+
 module.exports =
-  TYPES:
-    Q: 'Q'
-    AND: 'AND'
-    OR: 'OR'
-    RAW: 'RAW'
+  TYPES: TYPES
+  ACTION_TYPES: ACTION_TYPES
 
   preprocess: (q) ->
-    processed =
-      query: canonicalizeQuery q
-      options: canonicalizeOpts q
-      facet: q.facet
-    return processed
+    query = canonicalizeQuery q
+    options = canonicalizeOpts q
+    q.query = query
+    q.options = options
+    return q
+
+  isRegularWrite: isRegularWrite
+  isRawWrite: isRawWrite
+  isWrite: isWrite
+  isRaw: isRaw
+  isInsert: isInsert
+  isUpdate: isUpdate
+  isUpsert: isUpsert
+  isRemove: isRemove
 
   isAscVal: isAscVal
   isDescVal: isDescVal

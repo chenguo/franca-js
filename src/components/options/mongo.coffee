@@ -1,4 +1,5 @@
 _ = require 'lodash'
+common = require '../../common'
 BaseOptions = require './options'
 
 class MongoOptions extends BaseOptions
@@ -33,5 +34,14 @@ class MongoOptions extends BaseOptions
       , {}
       return fields: fieldOpts
 
+  multiRowOptions: (opts, q) ->
+    return unless q?
+    if common.isUpdate(q) or common.isUpsert(q)
+      return multi: not opts.singleRow
+    else if common.isRemove q
+      return justOne: !!opts.singleRow
+
+  upsertOptions: (opts, q) ->
+    return upsert: true if q? and common.isUpsert q
 
 module.exports = (new MongoOptions).convertOptions

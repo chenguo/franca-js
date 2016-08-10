@@ -7,8 +7,8 @@ class PostgresFacet extends BaseFacet
 
   applyFacetField: (queryComponents, facetOpts) ->
     selectFields = facetOpts.field + ', ' + facetOpts.countField
-    queryComponents.SELECT = selectFields
-    queryComponents['GROUP BY'] = facetOpts.field
+    queryComponents.select = selectFields
+    queryComponents.groupBy = facetOpts.field
 
   applyFacetSort: (queryComponents, facetOpts) =>
     if facetOpts.sortBy is @VALUE
@@ -17,7 +17,7 @@ class PostgresFacet extends BaseFacet
       orderBy = facetOpts.countField
     dir = if facetOpts.dir is 1 then @ASC else @DESC
     orderBy += ' ' + dir
-    queryComponents['ORDER BY'] = orderBy
+    queryComponents.orderBy = orderBy
 
   applyFacetImpl: (queryComponents, facetOpts) =>
     facetOpts.countField = "COUNT(#{facetOpts.field})"

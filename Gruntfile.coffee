@@ -24,6 +24,8 @@ module.exports = (grunt) ->
 
       query: src: ['test/components/query/*.coffee']
 
+      write: src: ['test/components/write/*.coffee']
+
       dataset: src: ['test/dataset/*.coffee']
 
       mongo: src: ['**/mongo.coffee']
@@ -39,11 +41,14 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default',
     ['compile', 'mochaTest:common', 'mochaTest:translate', 'mochaTest:facet',
-     'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:dataset']
+     'mochaTest:testOptions', 'mochaTest:query', 'mochaTest:write', 'mochaTest:dataset']
 
-  grunt.registerTask 'mongo', 'mochaTest:mongo'
+  grunt.registerTask 'mongo', ['compile', 'mochaTest:mongo']
 
-  grunt.registerTask 'postgres', 'mochaTest:postgres'
+  grunt.registerTask 'postgres', ['compile', 'mochaTest:postgres']
 
-  grunt.registerTask 'solr', 'mochaTest:solr'
+  grunt.registerTask 'solr', ['compile', 'mochaTest:solr']
 
+  grunt.registerTask 'write', ['compile', 'mochaTest:write']
+
+  grunt.registerTask 'translate', ['compile', 'mochaTest:translate']

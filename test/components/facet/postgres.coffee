@@ -8,42 +8,42 @@ testCases = require './test-cases'
 testTable = 'tab'
 translations =
   basic:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    'GROUP BY': 'category'
-    'ORDER BY': 'COUNT(category) DESC'
+    select: 'category, COUNT(category)'
+    table: testTable
+    groupBy: 'category'
+    orderBy: 'COUNT(category) DESC'
 
   withLimit:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    'GROUP BY': 'category'
-    'ORDER BY': 'COUNT(category) DESC'
-    LIMIT: 100
+    select: 'category, COUNT(category)'
+    table: testTable
+    groupBy: 'category'
+    orderBy: 'COUNT(category) DESC'
+    limit: 100
 
   countAsc:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    'GROUP BY': 'category'
-    'ORDER BY': 'COUNT(category) ASC'
+    select: 'category, COUNT(category)'
+    table: testTable
+    groupBy: 'category'
+    orderBy: 'COUNT(category) ASC'
 
   byValue:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    'GROUP BY': 'category'
-    'ORDER BY': 'category ASC'
+    select: 'category, COUNT(category)'
+    table: testTable
+    groupBy: 'category'
+    orderBy: 'category ASC'
 
   valueDesc:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    'GROUP BY': 'category'
-    'ORDER BY': 'category DESC'
+    select: 'category, COUNT(category)'
+    table: testTable
+    groupBy: 'category'
+    orderBy: 'category DESC'
 
   withQuery:
-    SELECT: 'category, COUNT(category)'
-    FROM: testTable
-    WHERE: "difficulty = 'high'"
-    'GROUP BY': 'category'
-    'ORDER BY': 'COUNT(category) DESC'
+    select: 'category, COUNT(category)'
+    table: testTable
+    where: "difficulty = 'high'"
+    groupBy: 'category'
+    orderBy: 'COUNT(category) DESC'
 
 
 facetTester = (key) ->
