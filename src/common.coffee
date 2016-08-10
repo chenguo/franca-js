@@ -121,7 +121,6 @@ module.exports =
   ACTION_TYPES: ACTION_TYPES
 
   preprocess: (q) ->
-    q = _.cloneDeep q
     query = canonicalizeQuery q
     options = canonicalizeOpts q
     q.query = query
