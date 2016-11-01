@@ -4,7 +4,7 @@ testCases = require './test-cases'
 
 translations =
   sampleQuery: 'q=price:[* TO 100]&start=50&rows=10'
-  sampleFacet: "q=population:[1000000 TO *]&facet.field=city&facet.sort=index"
+  sampleFacet: "q=population:[1000000 TO *]&facet.field=city&facet.sort=index&facet=true"
 
 testFn = common.makeTester testCases, franca.toSolr, translations
 

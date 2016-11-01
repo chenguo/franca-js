@@ -29,6 +29,7 @@ class SolrFacet extends BaseFacet
     @applyFacetField queryComponents, facetOpts
     @applyFacetSort queryComponents, facetOpts
     @applyFacetLimit queryComponents
+    queryComponents.facet = 'true'
     return queryComponents
 
 module.exports = (new SolrFacet).applyFacet

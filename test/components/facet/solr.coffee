@@ -10,22 +10,26 @@ translations =
   basic:
     'facet.field': 'category'
     'facet.sort': 'count'
+    facet: 'true'
     q: '*:*'
 
   withLimit:
     'facet.field': 'category'
     'facet.sort': 'count'
     'facet.limit': 100
+    facet: 'true'
     q: '*:*'
 
   byValue:
     'facet.field': 'category'
     'facet.sort': 'index'
+    facet: 'true'
     q: '*:*'
 
   withQuery:
     'facet.field': 'category'
     'facet.sort': 'count'
+    facet: 'true'
     q: 'difficulty:"high"'
 
 facetTester = common.makeTester testCases, components.toSolr, translations
